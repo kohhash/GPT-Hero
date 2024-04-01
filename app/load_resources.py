@@ -11,6 +11,7 @@ load_dotenv()
 
 # Access environment variables
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')
+STRIPE_WEBHOOK = os.getenv('STRIPE_WEBHOOK')
 
 # config_file = r"D:\coding\project_coding\django_GPT\GPTHero\app\data\config-1.ini"
 config = configparser.ConfigParser()
