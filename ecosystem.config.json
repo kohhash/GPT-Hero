@@ -3,7 +3,7 @@
       {
         "name": "GPTHero",
         "script": "manage.py",
-        "args": ["runserver"],
+        "args": ["runserver", "0.0.0.0:8000"],
         "exec_mode": "fork",
         "exec_interpreter": "python3"
       }
