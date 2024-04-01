@@ -1,0 +1,265 @@
+body
+{
+    margin:0;
+    padding:0;
+    font-family: 'Lato', sans-serif;
+    background-color: black;
+}
+.navbar
+{
+    background-color:black;
+    color:white;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:10px;
+    margin-left: 240px;
+    margin-right: 240px;
+   
+}
+.navbar-logo img
+{
+    height:40px;
+   
+}
+.navbar-links
+{
+    list-style:none;
+    display:flex;
+    margin:0;
+    padding:0;
+}
+.navbar-links li
+{
+    margin-left:40px;
+}
+.navbar-links a
+{
+text-decoration:none;
+color:white;
+padding:5px;
+font-weight: bold;
+}
+
+.head-body
+{
+    color:white;
+    height: 80vh;
+    margin-top: 120px;
+    padding: 0px;
+    font-family: 'Lato', sans-serif;
+}
+h1
+{
+    text-align:center;
+}
+.red-text
+{
+    color:red;
+}
+.box
+{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.container
+{
+    display:flex;
+    width:1000px;
+    height:350px;
+    border:1px solid #495057;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+
+}
+.partition1
+{
+    position:relative;
+    width:50%;
+    height:350px;
+    border:1px solid;
+    border-color: black black black black;
+    overflow:hidden;
+}
+.partition2
+{
+    position:relative;
+    width:50%;
+    height:350px;
+    border:1px solid;
+    border-color: black black black #495057;
+    overflow:hidden;
+}
+.button
+{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-image: linear-gradient( #EC1A3F,#EE376E);
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+}
+.middle-body
+{
+    color:white;
+    height: 100vh;
+    margin-top: 0px;
+    padding: 0px;
+    font-family: 'Lato', sans-serif;   
+}
+.price 
+{
+    color:white
+}
+.heading2
+{
+margin-top:0px;
+}
+.price
+{
+
+    height:90vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    overflow:hidden;
+    margin-top:80px;
+    margin-bottom:50px;
+}
+
+.price-box
+{
+    display:flex;
+    flex-direction: column;
+    width:300px;
+    height:475px;
+    border:1px solid #495057;
+    border-radius:20px;
+    margin:20px;
+}
+.box-align
+{
+    margin-top:-100px;
+}
+.price-head
+{
+    display:flex;
+    justify-content: center;
+    margin-top:20px;
+    margin-left:20px;
+    height:50px;
+    width:250px;
+    border:2px solid;
+    border-color:black black #495057;
+
+}
+.month
+{
+    font-size:25px;
+}
+.list
+{
+    
+    list-style-type:none;
+    margin-top:30px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right:50px;
+}
+.align-point
+{
+    margin-top:10px;
+}
+.button2
+{
+    bottom: 10px;
+    right: 10px;
+    background-image: linear-gradient( #EC1A3F,#EE376E);
+    color: white;
+    padding: 10px 30px;
+    margin-top:20px;
+    margin-left:50px;
+    margin-right:50px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer; 
+}
+.em 
+{
+color:#495057;
+}
+#text-box
+{
+ height:200px;  
+ width:450px; 
+ outline: none;
+ background-color: transparent;
+ border: 0px solid;
+ color:white;
+}
+@media (max-width: 1100px) {
+
+
+
+    .navbar-links {
+        margin-top: 0px;
+        padding:10px;
+    }
+
+    .navbar-links li {
+        margin-left: 15px;
+        margin-bottom: 10px;
+    }
+
+
+    .head-body {
+        margin-top: 0px;
+    }
+    
+    .container {
+        max-width: 90%;
+        flex-direction: column;
+    }
+
+    .partition1 {
+        display:flex;
+        flex-direction: column;
+        width:100%;
+        border-color: black black white  black;
+    }
+    .partition2 {
+        width:100%;
+        border-color: black ;
+    }
+    .price {
+        height:1500px;
+        margin-left: 25px;
+        margin-right: 25px;
+        max-width: 90%;
+        flex-direction: column;
+    }
+    .box-align
+    {
+    margin-top:0px;
+    }
+    .heading2
+    {
+        margin:50px;
+    }
+    .navbar
+    {
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+    .head-size
+    {
+      font-size: 30px;
+    }
+}

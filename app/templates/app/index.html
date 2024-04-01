@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage</title>
+  </head>
+  <body>
+    <form action="{% url 'app:rephrase'%}" , method="post">
+        {% csrf_token %}
+    <h4>Options</h4>
+      <label for="openai">OpenAI API key</label>
+      <input type="text" name="openai" id="openai" />
+      <br />
+      <label for="prowritingaid">ProWritingAid API key</label>
+      <input type="text" name="prowritingaid" id="prowritingaid" />
+      <br />
+      <label for="approach">Choose Approach - </label>  
+      <input type="radio" id="conservative" name="approach" value="Conservative" />
+      <label for="conservative">Conservative</label>
+      <input type="radio" id="creative" name="approach" value="Creative" checked/>
+      <label for="creative">Creative</label>
+      <br />
+      <label for="approach">Choose Model - </label>  
+      <input type="radio" id="gpt3" name="model" value="GPT-3" checked/>
+      <label for="gpt3">GPT-4</label>
+      <input type="radio" id="gpt4" name="model" value="GPT-4" />
+      <label for="gpt4">GPT-3</label>
+      <br>
+      <hr>
+      <h4>Advanced Features</h4>
+      <input type="checkbox" id="context" name="context" value="context" checked>
+    <label for="context">Context</label><br>
+    <label for="randomness">Select randomness</label>
+    <input type="range" min="1" max="10" value="5" id="randomness" name="randomness">
+    <br>
+    <label for="tone">Tone</label>
+    <input type="text" name="tone" id="tone" value="newspaper">
+    <br>
+    <label for="tone">Difficulty</label>
+    <input type="text" name="difficulty" id="difficulty" value="easy to understand, very common">
+    <br>
+    <label for="adj">Aditional Adjectives</label>
+    <input type="text" name="adj" id="adj" value="concise and precise, to the point">
+    <br>
+    <label for="myfile">Select a file:</label>
+<input type="file" id="myfile" name="myfile" multiple>
+    <hr>
+    <div>
+        <p>Context: This feature controls whether generated text should have coherent and consistent paragraphs, or not. Disabling it will produce text that may lack logical connections or transitions between ideas, resulting in a more fragmented and random style. Enabling it, on the other hand, will prioritize coherence and consistency, potentially sacrificing some level of novelty and unpredictability in the output.</p>
+        <p>Randomness: This parameter determines the degree of variability and unpredictability in the generated text. A higher value means that the text will be more diverse and less predictable, suitable for generating creative content such as slogans or poetic phrases. Conversely, a lower value will produce more predictable and coherent text, more appropriate for conveying factual information or formal arguments. However, if the generated text becomes nonsensical or meaningless, reducing the randomness may improve its coherence and intelligibility.</p>
+        <p>Tone: This setting allows you to select the appropriate style and register for the generated text, such as academic, journalistic, formal, casual, or even slangy and humorous ("meme language"). Depending on the chosen tone, the text will vary in vocabulary, syntax, and rhetorical strategies, adapting to different communicative purposes and audiences.</p>
+        <p>Difficulty: This feature controls the level of complexity and sophistication of the generated text, measured in terms of vocabulary richness, syntactic complexity, and discourse coherence. Higher difficulty settings will use more specialized and obscure terms, complex sentence structures, and sophisticated argumentative strategies, suitable for academic or intellectual discourse. Lower difficulty settings will use simpler and more accessible vocabulary, shorter sentences, and more straightforward arguments, appropriate for general audiences or informal contexts.</p>
+        <p>Additional adjectives: You can also specify any other desired properties or features of the generated text, such as its length, style, genre, tone, or topic. For instance, you could request the text to be more descriptive, poetic, persuasive, or informative, depending on your specific needs and preferences. However, keep in mind that some adjectives may conflict with others or require specific adjustments in the other settings to achieve the desired effect</p>
+        <p>Creative approach: This feature rephrases the input text based on the selected parameters to generate a new text that retains the original meaning and style, while also introducing some degree of novelty and personalization. It is particularly useful for adding a personal touch to the generated text.</p>
+    </div>
+    <hr>
+    <h4>!!Leave a blank line between each paragraph for accurate rephrasing!!</h4>
+    <br>
+    <label for="essay">Enter essay to be rephrased</label>
+    <br>
+    <textarea name="essay" id="essay" cols="30" rows="10" name="essay"></textarea>
+    <br>
+    <button type="submit">Rephrase</button>
+    </form>
+  </body>
+</html>

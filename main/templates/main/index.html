@@ -1,0 +1,268 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gpt hero</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">    
+<link rel="stylesheet" href="{% static "main/styles2.css" %}" type="text/css">
+    <style>
+        *{
+            font-family: 'Lato', sans-serif;
+        }
+        .head-body {
+            @media (max-width: 767px) {
+                margin-top: 80px;
+            }
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+        /* Custom styles for the toggle switch */
+        .toggle-slider {
+            width: 60px;
+            height: 34px;
+            position: relative;
+            display: inline-block;
+        }
+        .toggle-slider input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-bg-color{
+            background-color: #1f2937;
+        }
+        .rounded_card_border{
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+        <a class="navbar-brand" href="#">
+            <img src="../../static/main/pic.png" alt="logo" height="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarLinks">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link section_scroll_link" href="#pricing-plans">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-danger" href="{% url 'account_login' %}">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+  
+    <div class ="head-body">
+            <h1 class="head-size">Empower Your Writing:</h1>
+            <h1 class="head-size"><span class="red-text">AI-Proof</span> Content Writing Platform</h1>
+           
+            <div class="box">
+            <div class="container">
+             <div class="partition1">
+             <h2  style="margin-left:30px; margin-top:30px">My AI Content</h2>
+             <form action="{% url 'landing' %}" method="post">
+              {% csrf_token %}
+                 <textarea type="text" id="text-box"></textarea>
+             <input type="submit" class="button" value="Rephrase">
+             </form>
+
+             <!-- <textarea name="textarea" style="width:450px;height:200px;" id="text-box"></textarea>
+             <button class="button">Rephrase</button> -->
+             </div>
+             <div class="partition2">
+              <h2 style="margin-left:30px; margin-top:30px">Rewritten Text</h2>
+              <p style="margin-left:30px; margin-right:0px ;line-height:30px">AI-Proof Content ready to be used in your academic journals,blogs and professional websites </p>
+            </div>
+              </div> 
+            </div> 
+
+    </div>
+
+    <div class="container-xl px-4 py-5 text-white" id="pricing-plans">
+        <h1 class="text-center display-5 font-weight-bold mb-5">
+            Unlock <span class="text-gradient">Unlimited</span> <span class="text-danger">GPT</span><span class="text-white">Hero</span>
+        </h1>
+        <div class="row justify-content-center mb-4">
+            <span class="text-xl mb-2">Monthly</span>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="billing-toggle">
+                <label class="form-check-label" for="billing-toggle"></label>
+            </div>
+            <span class="text-xl mb-2">Yearly</span>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 gap-4">
+            <!-- Basic Plan -->
+            <div class="col mb-4 d-flex flex-column">
+                <div class="card custom-bg-color h-100 rounded_card_border">
+                    <div class="card-body rounded-lg p-4 flex-grow-1">
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Basic</h2>
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="basic-price">$5/Month</h2>
+                        <ul class="text-center  list-unstyled">
+                            <li class="mb-2">Bypasses GPTZero, TurnItIn, Copyleaks, and more</li>
+                            <li class="mb-2">Context up to 2021</li>
+                            <li class="mb-2">Custom Rephrasing Settings</li>
+                            <li class="mb-2">100MB File Uploads + OCR</li>
+                            <li class="mb-2">Rephrase long texts</li>
+                            <li class="mb-2">100,000 words with standard rephraser</li>
+                            <li class="">API Access</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-danger text-white rounded-pill px-4 py-2  mb-2 mx-2">Buy</button>
+                </div>
+            </div>
+            <!-- Standard Plan -->
+            <div class="col mb-4 d-flex flex-column">
+                <div class="card custom-bg-color h-100 rounded_card_border" >
+                    <div class="card-body rounded-lg p-4 flex-grow-1">
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Standard</h2>
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="standard-price">$15/Month</h2>
+                        <ul class="text-center  list-unstyled">
+                            <li class="mb-2">Bypasses GPTZero, TurnItIn, Copyleaks, and more</li>
+                            <li class="mb-2">Context Up to 2023</li>
+                            <li class="mb-2">Custom Rephrasing Settings</li>
+                            <li class="mb-2">100MB File Uploads + OCR</li>
+                            <li class="mb-2">Rephrase long texts</li>
+                            <li class="mb-2">200,000 words with standard or pro or ultimate rephrasers</li>
+                            <li class="">API Access</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-danger text-white rounded-pill px-4 py-2  mb-2 mx-2">Buy</button>
+                </div>
+            </div>
+            <!-- Pro Plan -->
+            <div class="col mb-4 d-flex flex-column">
+                <div class="card custom-bg-color h-100 rounded_card_border">
+                    <div class="card-body rounded-lg p-4 flex-grow-1">
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Pro</h2>
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="pro-price">$30/Month</h2>
+                        <ul class="text-center  list-unstyled">
+                            <li class="mb-2">Bypasses GPTZero, TurnItIn, Copyleaks, and more</li>
+                            <li class="mb-2">Context Up to 2023</li>
+                            <li class="mb-2">Custom Rephrasing Settings</li>
+                            <li class="mb-2">100MB File Uploads + OCR</li>
+                            <li class="mb-2">Rephrase long texts</li>
+                            <li class="mb-2">500,000 words with standard or pro or ultimate rephrasers</li>
+                            <li class="mb-2">Upload, See, and Talk to Images (Coming Soon)</li>
+                            <li class="">API Access</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-danger text-white rounded-pill px-4 py-2  mb-2 mx-2">Buy</button>
+                </div>
+            </div>
+            <!-- Enterprise Plan -->
+            <div class="col mb-4 d-flex flex-column">
+                <div class="card custom-bg-color h-100 rounded_card_border ">
+                    <div class="card-body rounded-lg p-4 flex-grow-1">
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Enterprise</h2>
+                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="basic-price">Contact Us</h2>
+                        <ul class="text-center  list-unstyled">
+                            <li class="mb-2">Customized solutions for your business needs</li>
+                            <li class="mb-2">Dedicated support and integration assistance</li>
+                            <li class="mb-2">Volume discounts for high usage</li>
+                            <li class="mb-2">Advanced analytics and reporting</li>
+                            <li class="">And more...</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-danger text-white rounded-pill px-4 py-2 mb-2 mx-2">Buy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<footer class="footer mb-4">
+    <div class="container-footer" style="text-align: center;">
+        <p style="color: aliceblue;">&copy; 2023 GPTHero. All Rights Reserved.</p>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <a href="https://www.instagram.com/gpt.hero/" class="mx-2" target="_blank">
+        <img class="ml-1" src="https://www.transparentpng.com/thumb/logo-instagram/JFyofc-logo-instagram-background-png.png" alt="logo" height="40" width="40">
+        </a>
+        <a href="https://twitter.com/GPTHeroAI?s=20" class="mx-2" target="_blank" >
+        <img class="ml-1" src="https://www.transparentpng.com/thumb/twitter/twitter-png-3.png" alt="logo" height="40" width="40">
+        </a>
+        <a href="https://www.tiktok.com/@gpt_hero" class="mx-2">
+          <img class="ml-1" src="https://www.transparentpng.com/thumb/logo/8OmEIz--tiktok-musical-logo-icon-png-playback-musics-song-video.png" alt="logo" height="40" width="40">
+        </a>
+        <a class="mx-2 d-flex justify-content-center align-items-center" href="https://discord.com/invite/2zN3cZ3nwM"  target="_blank">
+          <img class="ml-1" src="{% static "main/discord-mark-blue.png" %}" alt="logo"  width="40">
+        </a>
+        <a class="mx-2 d-flex justify-content-center align-items-center" href="https://www.youtube.com/channel/UCXBkn1q0e-Ug-3LzWMiFhzg"  target="_blank">
+          <img class="ml-1" src="{% static "main/youtube.png" %}" alt="logo"  width="40">
+        </a>
+      </div>
+</footer>
+<script>
+    // Toggle the pricing between monthly and yearly
+    document.getElementById('billing-toggle').addEventListener('change', function() {
+        if (this.checked) {
+            document.getElementById('basic-price').textContent = '$50/Year';
+            document.getElementById('standard-price').textContent = '$150/Year';
+            document.getElementById('pro-price').textContent = '$300/Year';
+        } else {
+            document.getElementById('basic-price').textContent = '$5/Month';
+            document.getElementById('standard-price').textContent = '$15/Month';
+            document.getElementById('pro-price').textContent = '$30/Month';
+        }
+    });
+    document.querySelectorAll('a.section_scroll_link').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+  
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

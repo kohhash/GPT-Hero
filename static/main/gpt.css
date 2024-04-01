@@ -1,0 +1,259 @@
+body {
+    margin: 0;
+    font-family: var(--bs-font-sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+.main {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    /* height: -webkit-fill-available; */
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-left: 10px;
+    width: 250px;
+}
+
+.mb-auto {
+    margin-bottom: auto!important;
+}
+.flex-column {
+    flex-direction: column!important;
+}
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    list-style: none;
+}
+.dropdown-item
+{
+text-decoration: none;
+}
+.middle{
+    display:flex;
+}
+
+/* .side{
+    font-family: 'Lato', sans-serif;
+} */
+
+.main-body
+{
+    height: 100vh;
+    width:110vh;
+    margin-left:10px;
+    display:flex;
+    flex-direction: column;
+    z-index: 500; 
+    margin-right: 50px;
+    /* position: fixed; */
+}
+
+.box {
+  
+    display: inline-block;
+    width: 100vh; /* Adjust the width based on your requirements */
+    height: 45vh;
+    border: 2px solid #495057;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 64px;
+    margin-left: 10px;
+    color:rgb(124, 122, 122);
+}
+.partition1
+{
+    padding:0;
+    margin:0;
+    padding-left:20px;
+    width:100%;
+    height:8vh;
+    border:2px solid #495057;  
+    border-color:black black #495057 black; 
+}
+.partition2
+{
+    padding:0;
+    margin:0;
+    padding-left:20px;
+    padding-right:20px;
+    width:100%;
+    height:100%;
+    border:2px solid black;  
+    line-height:25px;
+}
+.button2
+{
+    height:50px;
+    width:230px;
+    background-image: linear-gradient( #EC1A3F,#EE376E);
+    color:#e3e9f0 ;
+    padding: 10px 30px;
+    border-radius: 80px;
+    border: none;
+    cursor: pointer;
+    margin-top:20px;
+    font-size:17px;
+    font-weight:bold ;
+}
+
+
+.right-nav
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 320px; 
+    right:0px;
+    /* position: fixed;  */
+    z-index: 1; 
+    top: 0; 
+    right:0;
+    /* background-color: bisque;   */
+}
+#user
+{
+    margin-top: 40px;
+    color:white;
+    background-color: black;
+    font-size:20px;
+    border:none;
+}
+#model
+{
+    padding:5px;
+    margin: 0;
+    color:white;
+    background-color: black;
+    font-size:15px;
+    width:200px;
+    cursor: pointer;
+}
+.heading2
+{
+    border:1px solid white;
+    margin-top:70px;
+    height:45px;
+    width:200px;
+    border-color:black black white black; 
+    padding-bottom: 0px;
+    color:white;
+    font-size:12px;
+}
+.heading3
+{
+    margin-bottom: 10px;
+    color:white;
+    font-size:13px;
+}
+#checkbox
+{
+    margin-top:20px;
+
+}
+#checkbox label
+{
+    font-size:15px;
+    color:white;
+    
+} 
+.tick
+{
+   height:15px;
+   width:15px;
+   margin-bottom:5px;
+}
+#vol
+{
+    width:200px;
+    background: #d3d3d3;
+    cursor: pointer;
+}
+
+#range
+{
+    margin-top:15px;
+}
+#fname
+{
+    width:200px;
+    height:24px;
+    color:white;
+    border:1px solid white;
+    background-color: black;
+    border-radius: 5px;
+    margin-top:10px;
+}
+#heading4
+{
+    font-size: 15px;
+    color:white;
+}
+#name
+{
+    border:1px solid white;
+    border-color:black black white black;
+    height:250px;
+    width:200px;
+}
+#actions
+{
+    margin-top: 0px;
+}
+#text-box
+{
+ height:200px;  
+ width:450px; 
+ outline: none;
+ background-color: transparent;
+ border: 0px solid;
+ color:white;
+ overflow:hidden;
+ resize:none
+}
+
+
+@media (max-width: 770px) {
+    /* .side-nav {
+      width: 100%;
+    } */
+    .middle
+    {
+        display: flex;
+        flex-direction: column;
+        width:100%;
+    }
+
+    .main-body {
+      width:100%;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      height:auto;
+
+      /* overflow-y: auto; */
+    }
+    .box
+    {
+        width:90%;
+    }
+    .container {
+      width: 100%;
+      margin-top: 0;
+    }
+    .right-nav {
+        width: 100%;
+        margin-top: 0px;
+    display: flex;
+    align-items: center;
+      }
+  }

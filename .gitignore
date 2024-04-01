@@ -1,0 +1,10 @@
+.venv
+__pycache__
+accounts/__pycache__
+app/__pycache__
+configurations/__pycache__
+GPTHero/__pycache__
+main/__pycache__
+db.sqlite3
+logs.txt
+.env
