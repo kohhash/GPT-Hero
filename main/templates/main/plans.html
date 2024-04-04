@@ -76,7 +76,102 @@
     width: 100%;
     z-index:9999; 
     border-radius:0px
-}
+  }
+  .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+  }
+
+  .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+  }
+  .text-style1 {
+      display: flex;
+      justify-content: center;
+      font-size: 40px;
+      color: white;
+      padding-top: 40px;
+  }
+
+  .text-style2 {
+      font-size: 25px;
+      color: gray;
+  }
+  .pricing-card{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+  }
+  .card {    
+      width: 20%;      
+      margin-left: 2%;
+      margin-right: 2%;
+      background-image: linear-gradient(-225deg, 
+              #231557 0%,
+              #ee2200 29%,
+              #ff1361 67%,
+              white 100%);
+      border-radius: 20px;
+      transition: all .3s;
+  }
+
+  .card2 {
+      width: 100%;
+      background-color: #1a1a1a;
+      border-radius: 20px;
+      transition: all .2s;
+  }
+
+  .card2:hover {
+      transform: scale(0.98);
+      border-radius: 20px;
+  }
+
+  .card:hover {
+      box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.30);
+  }
+  .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 34px;
+  }
+
+  .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: red;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 50%;
+  }
+
+  input:checked + .slider {
+      background: red;
+  }
+
+  input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+  }
   </style>
 </head>
 <body>
@@ -172,7 +267,7 @@
     <div class="main" style="background-color: black;">
       <div class="d-flex flex-column flex-shrink-0 p-3 text-white sidenav" style="width: 280px;">
         <ul class="nav nav-pills flex-column mb-auto" style="margin-left: 30px; margin-top: 50px;">
-          <li class="nav-item">
+          <li style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
             <a href="{% url "home" %}" class="nav-link text-white">
               <svg class="bi me-2" width="16" height="16">
                 <use xlink:href="#home"></use>
@@ -212,7 +307,7 @@
     <!-- mainbody -->
     <div class="main-body w-100">
       <div class="container-xl px-4 py-5 text-white">
-          <h1 class="text-center display-5 font-weight-bold mb-5">
+          <!-- <h1 class="text-center display-5 font-weight-bold mb-5">
               Unlock <span class="text-gradient">Unlimited</span> <span class="text-danger">GPT</span><span class="text-white">Hero</span>
           </h1>
           <div class="d-flex justify-content-center ">
@@ -225,30 +320,167 @@
               <span class="text-xl mb-2">Yearly</span>
               </div>
           </div>
-          <div class="d-flex justify-content-center gap-5 flex-wrap">
-              <!-- Basic Plan -->
-              {% for plan in plans %}
-              <div class="custom-bg-color" style="max-width: 400px;">
-                  <div class="custom-bg-color rounded-lg p-4 d-flex flex-column">
-                      <div class="flex-1">
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">{{ plan.name }}</h2>
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="basic-price">${{ plan.price }}/Month</h2>
-                        <ul class="text-center mb-4 list-unstyled">
-                            {% for p in plan.features.all %}
-                            <li class="mb-2">{{ p.feature }}</li>
-                            {% endfor %}
-                        </ul>
-                      </div>
-                     <div>
-                      <form action="{% url "plans_buy" plan.id %}" enctype="multipart/form-data" method="post" role="plans_page">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger text-white rounded-pill px-4 py-2 w-100" data-bind-href="pricing">Buy</button>
-                    </form>
-                     </div>
-                  </div>
-              </div>
-              {% endfor %}
+        </div> -->
+        <div class="w-[100%] flex flex-col justify-center items-center text-center mt-20">
+          <div class="flex flex-row" id="pricing"> 
+              <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; color: white; font-size: 60px;">Unlock</span>&nbsp;&nbsp;&nbsp;
+              <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; font-size: 60px;">Unlimited</span>&nbsp;&nbsp;&nbsp;
+              <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; color: red; font-size: 60px;">GPT</span> 
+              <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; color: white; font-size: 60px;">Hero</span>
           </div>
+          <div class="flex flex-row items-center mt-10" style="display: flex; align-items: center;justify-content: center;">
+              <label class="text-white" style="font-size: 30px; font-family:sans-serif;">Monthly</label>&nbsp; 
+              <label class="switch">
+                  <input type="checkbox" id="Checkbox" onchange="updatelabel()">
+                  <span class="slider"></span>
+              </label>
+              
+              <label class="text-white" style="font-size: 30px; font-family:sans-serif;">Yearly</label>
+          </div>
+          <div class="w-[100%] flex flex-row justify-center" style="margin-top:40px">
+            <div class="pricing-card">
+                <div class="card">
+                    <div class="card2 flex flex-col items-center" style="padding-bottom: 10px; font-family:sans-serif;">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Basic</label>
+                        <div class="flex flex-row text-style1" style="font-family:sans-serif;">
+                            <p>$</p><label id="price_basic">5</label><label id="sel_time1">/Month</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>
+        
+                <div class="card">
+                    <div class="card2 flex flex-col items-center" style="padding-bottom: 10px; font-family:sans-serif;">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Standard</label>
+                        <div class="flex flex-row text-style1">
+                            <p>$</p><label id="price_standard">15</label><label id="sel_time2">/Month</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>
+        
+                <div class="card">
+                    <div class="card2 flex flex-col items-center" style="padding-bottom: 10px; font-family:sans-serif;">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Pro</label>
+                        <div class="flex flex-row text-style1">
+                            <p>$</p><label id="price_pro">30</label><label id="sel_time3">/Month</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>  
+        
+                <div class="card">
+                    <div class="card2 flex flex-col items-center h-[100%]" style="padding-bottom: 10px; font-family:sans-serif;">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Enterprise</label>
+                        <!-- <div class="flex flex-row text-style1">
+                          <p>$</p><label id="price_pro">30</label><label id="sel_time3">/Month</label>
+                        </div> -->
+                        <div class="flex flex-row text-style1">
+                            <p>
+                              <label>Contact Us</label>
+                            </p>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="flex flex-row">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>
+            </div>
+        </div>                
       </div>
   </div>
   
@@ -256,6 +488,37 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  
+  <script>    
+
+    function updatelabel() {
+        let checkbox = document.getElementById('Checkbox');
+        let price_basic = document.getElementById('price_basic');
+        let price_standard = document.getElementById('price_standard');
+        let price_pro = document.getElementById('price_pro');
+        let sel_time1 = document.getElementById('sel_time1');
+        let sel_time2 = document.getElementById('sel_time2');
+        let sel_time3 = document.getElementById('sel_time3');
+        price_basic_num = parseInt(price_basic.textContent, 10);
+        price_standard_num = parseInt(price_standard.textContent, 10);        
+        price_pro_num = parseInt(price_pro.textContent, 10);
+        
+        if (checkbox.checked) {
+            price_basic.innerText = price_basic_num * 10;
+            price_standard.innerText = price_standard_num * 10;
+            price_pro.innerText = price_pro_num * 10;
+            sel_time1.textContent = '/Year';
+            sel_time2.textContent = '/Year';
+            sel_time3.textContent = '/Year';
+        } else {
+            price_basic.innerText = price_basic_num / 10;
+            price_standard.innerText = price_standard_num / 10;
+            price_pro.innerText = price_pro_num / 10;
+            sel_time1.textContent = '/Month';
+            sel_time2.textContent = '/Month';
+            sel_time3.textContent = '/Month';
+        }
+    }
+
+  </script>  
 </body>
 </html>
