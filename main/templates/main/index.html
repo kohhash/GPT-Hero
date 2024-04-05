@@ -18,7 +18,60 @@
         *{
             font-family: 'Lato', sans-serif;
         }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: red;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        .gradient-text-unlimited {
+            background-image: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .price-header-container{            
+            width: 100%;            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;            
+        }
         .head-body {
+            height: auto;
             @media (max-width: 767px) {
                 margin-top: 80px;
             }
@@ -37,34 +90,12 @@
             opacity: 0;
             width: 0;
             height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+        }        
         input:checked + .slider {
-            background-color: #2196F3;
+            background-color: #ff0000;
         }
         input:focus + .slider {
-            box-shadow: 0 0 1px #2196F3;
+            box-shadow: 0 0 1px #ff0000;
         }
         input:checked + .slider:before {
             transform: translateX(26px);
@@ -79,6 +110,70 @@
         }
         .rounded_card_border{
             border-radius: 20px;
+        }
+        .card-body{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center; 
+            padding: 0% !important;
+            margin-top: 4vh;
+        }
+        .text-style1 {
+            display: flex;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            padding-top: 40px;
+        }
+
+        .text-style2 {
+            font-size: 25px;
+            color: gray;
+        }
+        .pricing-card{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background-color: black;
+        }
+        .card {
+            width: 21%;
+            margin-left: 2%;
+            margin-right: 2%;
+            background-image: linear-gradient(-225deg, 
+                    #231557 0%,
+                    #ee2200 29%,
+                    #ff1361 67%,
+                    white 100%);
+            border-radius: 20px;
+            transition: all .3s;
+        }
+
+        .card2 {
+            width: 100%;
+            background-color: #1a1a1a;
+            border-radius: 20px;
+            transition: all .2s;
+            text-align: center;
+            align-items: center;
+        }
+
+        .card2:hover {
+            transform: scale(0.98);
+            border-radius: 20px;
+        }
+
+        .card:hover {
+            box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.30);
+        }
+
+        .row-flex {
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -125,95 +220,163 @@
 
     </div>
 
-    <div class="container-xl px-4 py-5 text-white" id="pricing-plans">
-        <h1 class="text-center display-5 font-weight-bold mb-5">
-            Unlock <span class="text-gradient">Unlimited</span> <span class="text-danger">GPT</span><span class="text-white">Hero</span>
-        </h1>
-        <div class="row justify-content-center mb-4">
-            <span class="text-xl mb-2">Monthly</span>
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="billing-toggle">
-                <label class="form-check-label" for="billing-toggle"></label>
+    <div class="container-xl text-white" id="pricing-plans" style="padding-top: 15vh; padding-bottom: 15vh;">
+        <div class="price-header-container">
+            <div class="flex flex-row" id="pricing"> 
+                <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; color: white; font-size: 60px;">Unlock</span>&nbsp;&nbsp;&nbsp;
+                <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; font-size: 60px;">Unlimited</span>&nbsp;&nbsp;&nbsp;
+                <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; color: red; font-size: 60px;">GPT</span> 
+                <span class="gradient-text-unlimited" style="font-family:sans-serif; font-weight: 700; color: white; font-size: 60px;">Hero</span>
             </div>
-            <span class="text-xl mb-2">Yearly</span>
-        </div>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 gap-4">
-            <!-- Basic Plan -->
-            <div class="col mb-4 d-flex flex-column">
-                <div class="card custom-bg-color h-100 rounded_card_border">
-                    <div class="card-body rounded-lg p-4 flex-grow-1">
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Basic</h2>
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="basic-price">$5/Month</h2>
-                        <ul class="text-center  list-unstyled">
-                            <li class="mb-2">Bypasses GPTZero, TurnItIn, Copyleaks, and more</li>
-                            <li class="mb-2">Context up to 2021</li>
-                            <li class="mb-2">Custom Rephrasing Settings</li>
-                            <li class="mb-2">100MB File Uploads + OCR</li>
-                            <li class="mb-2">Rephrase long texts</li>
-                            <li class="mb-2">100,000 words with standard rephraser</li>
-                            <li class="">API Access</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-danger text-white rounded-pill px-4 py-2  mb-2 mx-2">Buy</button>
-                </div>
-            </div>
-            <!-- Standard Plan -->
-            <div class="col mb-4 d-flex flex-column">
-                <div class="card custom-bg-color h-100 rounded_card_border" >
-                    <div class="card-body rounded-lg p-4 flex-grow-1">
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Standard</h2>
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="standard-price">$15/Month</h2>
-                        <ul class="text-center  list-unstyled">
-                            <li class="mb-2">Bypasses GPTZero, TurnItIn, Copyleaks, and more</li>
-                            <li class="mb-2">Context Up to 2023</li>
-                            <li class="mb-2">Custom Rephrasing Settings</li>
-                            <li class="mb-2">100MB File Uploads + OCR</li>
-                            <li class="mb-2">Rephrase long texts</li>
-                            <li class="mb-2">200,000 words with standard or pro or ultimate rephrasers</li>
-                            <li class="">API Access</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-danger text-white rounded-pill px-4 py-2  mb-2 mx-2">Buy</button>
-                </div>
-            </div>
-            <!-- Pro Plan -->
-            <div class="col mb-4 d-flex flex-column">
-                <div class="card custom-bg-color h-100 rounded_card_border">
-                    <div class="card-body rounded-lg p-4 flex-grow-1">
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Pro</h2>
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="pro-price">$30/Month</h2>
-                        <ul class="text-center  list-unstyled">
-                            <li class="mb-2">Bypasses GPTZero, TurnItIn, Copyleaks, and more</li>
-                            <li class="mb-2">Context Up to 2023</li>
-                            <li class="mb-2">Custom Rephrasing Settings</li>
-                            <li class="mb-2">100MB File Uploads + OCR</li>
-                            <li class="mb-2">Rephrase long texts</li>
-                            <li class="mb-2">500,000 words with standard or pro or ultimate rephrasers</li>
-                            <li class="mb-2">Upload, See, and Talk to Images (Coming Soon)</li>
-                            <li class="">API Access</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-danger text-white rounded-pill px-4 py-2  mb-2 mx-2">Buy</button>
-                </div>
-            </div>
-            <!-- Enterprise Plan -->
-            <div class="col mb-4 d-flex flex-column">
-                <div class="card custom-bg-color h-100 rounded_card_border ">
-                    <div class="card-body rounded-lg p-4 flex-grow-1">
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4">Enterprise</h2>
-                        <h2 class="text-center display-5 font-weight-bold text-white mb-4" id="basic-price">Contact Us</h2>
-                        <ul class="text-center  list-unstyled">
-                            <li class="mb-2">Customized solutions for your business needs</li>
-                            <li class="mb-2">Dedicated support and integration assistance</li>
-                            <li class="mb-2">Volume discounts for high usage</li>
-                            <li class="mb-2">Advanced analytics and reporting</li>
-                            <li class="">And more...</li>
-                        </ul>
-                    </div>
-                    <button class="btn btn-danger text-white rounded-pill px-4 py-2 mb-2 mx-2">Buy</button>
-                </div>
+            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 10px;">
+                <label class="text-white" style="font-size: 30px; font-family:sans-serif;">Monthly</label>&nbsp; 
+                <label class="switch">
+                    <input type="checkbox" id="Checkbox" onchange="updatelabel()">
+                    <span class="slider"></span>
+                </label>
+                
+                <label class="text-white" style="font-size: 30px; font-family:sans-serif;">Yearly</label>
             </div>
         </div>
+        <div class="card-body">
+            <div class="pricing-card">
+                <div class="card">
+                    <div class="card2">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Basic</label>
+                        <div class="text-style1" style="font-family:sans-serif;">
+                            <p>$</p><label id="price_basic">5</label><label id="sel_time1">/Month</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>
+        
+                <div class="card">
+                    <div class="card2">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Standard</label>
+                        <div class="text-style1">
+                            <p>$</p><label id="price_standard">15</label><label id="sel_time2">/Month</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>
+        
+                <div class="card">
+                    <div class="card2">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Pro</label>
+                        <div class="text-style1">
+                            <p>$</p><label id="price_pro">30</label><label id="sel_time3">/Month</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>  
+        
+                <div class="card">
+                    <div class="card2">
+                        <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Enterprise</label>
+                        <div class="text-style1">
+                            <label>Contact Us</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Context up to 2021</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Custom Rephrasing Settings</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100MB File Uploads + OCR</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">100,000 words with</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">standard rephraser</label>
+                        </div>
+                        <div class="row-flex">
+                            <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
+                        </div>
+                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                    </div>
+                </div>
+            </div>
+        </div>        
     </div>
     
 <footer class="footer mb-4">
@@ -260,6 +423,34 @@
           });
         });
       });
+      function updatelabel() {
+        let checkbox = document.getElementById('Checkbox');
+        let price_basic = document.getElementById('price_basic');
+        let price_standard = document.getElementById('price_standard');
+        let price_pro = document.getElementById('price_pro');
+        let sel_time1 = document.getElementById('sel_time1');
+        let sel_time2 = document.getElementById('sel_time2');
+        let sel_time3 = document.getElementById('sel_time3');
+        price_basic_num = parseInt(price_basic.textContent, 10);
+        price_standard_num = parseInt(price_standard.textContent, 10);        
+        price_pro_num = parseInt(price_pro.textContent, 10);
+        
+        if (checkbox.checked) {
+            price_basic.innerText = price_basic_num * 10;
+            price_standard.innerText = price_standard_num * 10;
+            price_pro.innerText = price_pro_num * 10;
+            sel_time1.textContent = '/Year';
+            sel_time2.textContent = '/Year';
+            sel_time3.textContent = '/Year';
+        } else {
+            price_basic.innerText = price_basic_num / 10;
+            price_standard.innerText = price_standard_num / 10;
+            price_pro.innerText = price_pro_num / 10;
+            sel_time1.textContent = '/Month';
+            sel_time2.textContent = '/Month';
+            sel_time3.textContent = '/Month';
+        }
+    }
 </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
