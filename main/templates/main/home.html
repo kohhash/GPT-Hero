@@ -83,6 +83,18 @@
     .partition1 {
       align-content: center;
     }
+    .box {
+        display: inline-block;
+        width: 100vh; /* Adjust the width based on your requirements */
+        height: 45vh;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 64px;
+        margin-left: 10px;
+        color: rgb(124, 122, 122);
+        position: relative;
+        background: #000; /* Set a dark background for better laser visibility */
+    }    
   </style>
 </head>
 
@@ -217,8 +229,7 @@
       </div>
     </nav>
     <!-- mainbody -->
-    <div class="main-body w-100">
-      <!-- <div> -->
+    <div class="main-body w-100" style="align-items: center;">      
         <div class="box">
           <div class="partition1">
             <h3>Input Text For AI Rephrasing</h3>
@@ -246,8 +257,9 @@
         </div>
       </div>
       {% endif %}
-      <button class="button2" type="submit" form="rephrase-form" id="submit_button_for_form">Rephrase Now</button>
-    <!-- </div> -->
+      <div style="align-self: center;">
+        <button class="button2" type="submit" form="rephrase-form" id="submit_button_for_form">Rephrase Now</button>
+      </div>    
     </div>    
   </div>
   
