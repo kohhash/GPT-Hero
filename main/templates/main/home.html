@@ -90,7 +90,8 @@
       <a class="navbar-brand" href="#">
         <img src="{% static "main/pic.png" %}" height="50" width="200" class="d-inline-block align-top" alt="">
       </a>
-      <div id="drop">
+      <a style="color: white; font-size: 20px; margin-right: 20px">{{request.user}}</a>
+      <!-- <div id="drop">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
           aria-expanded="false" style="color: white; font-size: 20px; margin-right: 20px">
           {{request.user}}
@@ -99,7 +100,7 @@
           <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
           <li><a class="dropdown-item" href="{% url 'logout_redirect' %}">Logout</a></li>
         </ul>
-      </div>
+      </div> -->
     </div>
   </nav>
 
