@@ -130,7 +130,7 @@
   }
 
   .card2:hover {
-      transform: scale(0.98);
+      transform: scale(0.99);
       border-radius: 20px;
   }
 
@@ -171,6 +171,43 @@
       -webkit-transform: translateX(26px);
       -ms-transform: translateX(26px);
       transform: translateX(26px);
+  }
+  .buy-button {
+      width: 90%;
+      height: 40px;
+      color: white;
+      background-image: linear-gradient(to right, #fcda44 0%, #f83434 100%);
+      border: none;
+      border-radius: 10px;
+      margin-top: 60px;
+      cursor: pointer;
+      outline: none;
+      font-weight: bold;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .buy-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .contact-us-button{
+    width: 90%;
+      height: 40px;
+      color: white;
+      background-image: linear-gradient(to right, #938cf8 0%, #1417e9 100%);
+      border: none;
+      border-radius: 10px;
+      margin-top: 60px;
+      cursor: pointer;
+      outline: none;
+      font-weight: bold;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .contact-us-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
   </style>
 </head>
@@ -370,7 +407,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="buy-button">Buy Now</button>
                     </div>
                 </div>
         
@@ -404,7 +441,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="buy-button">Buy Now</button>
                     </div>
                 </div>
         
@@ -438,7 +475,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="buy-button">Buy Now</button>
                     </div>
                 </div>  
         
@@ -477,7 +514,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="contact-us-button">Contact Us</button>
                     </div>
                 </div>
             </div>

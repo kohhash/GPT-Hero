@@ -15,6 +15,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">    
 <link rel="stylesheet" href="{% static "main/styles2.css" %}" type="text/css">
     <style>
+        @keyframes gradientBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
         *{
             font-family: 'Lato', sans-serif;
         }
@@ -23,8 +34,7 @@
             display: inline-block;
             width: 60px;
             height: 34px;
-        }
-
+        }        
         .switch input {
             opacity: 0;
             width: 0;
@@ -72,6 +82,7 @@
         }
         .head-body {
             height: auto;
+            padding-top: 15vh;
             @media (max-width: 767px) {
                 margin-top: 80px;
             }
@@ -162,7 +173,7 @@
         }
 
         .card2:hover {
-            transform: scale(0.98);
+            transform: scale(0.99);
             border-radius: 20px;
         }
 
@@ -176,10 +187,64 @@
             text-align: center;
             justify-content: center;
         }
+        .navbar {
+            position: fixed;
+            margin: 0%;
+            padding-left: 70px;
+            padding-right: 100px;
+            background-color: #1a1a1a;
+            width: 100%;
+            top: 0;
+            border-bottom-left-radius: 30%;
+            border-bottom-right-radius: 30%;
+            z-index: 1000; /* Adjust the z-index as needed to ensure the navbar appears above other content */
+        }
+        .footer {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            background-color: #160909;
+            color: white;
+        }
+        .buy-button {
+            width: 90%;
+            height: 40px;
+            color: white;
+            background-image: linear-gradient(to right, #fcda44 0%, #f83434 100%);
+            border: none;
+            border-radius: 10px;
+            margin-top: 60px;
+            cursor: pointer;
+            outline: none;
+            font-weight: bold;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .buy-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .contact-us-button{
+            width: 90%;
+            height: 40px;
+            color: white;
+            background-image: linear-gradient(to right, #938cf8 0%, #1417e9 100%);
+            border: none;
+            border-radius: 10px;
+            margin-top: 60px;
+            cursor: pointer;
+            outline: none;
+            font-weight: bold;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .contact-us-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
         <a class="navbar-brand" href="#">
             <img src="../../static/main/pic.png" alt="logo" height="40">
         </a>
@@ -187,7 +252,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarLinks">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" style="column-gap: 30px;">
                 <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
                 <li class="nav-item"><a class="nav-link section_scroll_link" href="#pricing-plans">Pricing</a></li>
                 <li class="nav-item"><a class="nav-link btn btn-outline-danger" href="{% url 'account_login' %}">Login</a></li>
@@ -271,7 +336,7 @@
                         <div class="row-flex">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="buy-button">Buy Now</button>
                     </div>
                 </div>
         
@@ -305,7 +370,7 @@
                         <div class="row-flex">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="buy-button">Buy Now</button>
                     </div>
                 </div>
         
@@ -339,7 +404,7 @@
                         <div class="row-flex">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="buy-button">Buy Now</button>
                     </div>
                 </div>  
         
@@ -373,14 +438,14 @@
                         <div class="row-flex">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button style="width: 90%; height: 40px; color: white; background-color: red; border-radius: 10px; margin-top: 60px;">Buy</button>
+                        <button class="contact-us-button">Contact Us</button>
                     </div>
                 </div>
             </div>
         </div>        
     </div>
     
-<footer class="footer mb-4">
+<footer class="footer mt-5">
     <div class="container-footer" style="text-align: center;">
         <p style="color: aliceblue;">&copy; 2023 GPTHero. All Rights Reserved.</p>
     </div>

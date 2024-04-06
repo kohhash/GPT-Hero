@@ -12,10 +12,7 @@ body
     display:flex;
     justify-content: space-between;
     align-items: center;
-    padding:10px;
-    margin-left: 240px;
-    margin-right: 240px;
-   
+    padding:10px;   
 }
 .navbar-logo img
 {
