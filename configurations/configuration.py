@@ -32,7 +32,8 @@ class Configuration:
         # PRIVATE_KEY = PRIVATE_KEY
         PRIVATE_KEY = STRIPE_API_KEY
         # REDIRECT_URI = "http://127.0.0.1:8000"
-        REDIRECT_URI = "http://195.201.56.175:8000"
+        # REDIRECT_URI = "http://195.201.56.175:8000"
+        REDIRECT_URI = "https://popular-lamb-sunny.ngrok-free.app"
         STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
 
     class ResourceValues:
