@@ -407,7 +407,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button class="buy-button">Buy Now</button>
+                        <button class="buy-button" id="buy-basic" onclick="buyBasic()">Buy Now</button>
                     </div>
                 </div>
         
@@ -441,7 +441,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button class="buy-button">Buy Now</button>
+                        <button class="buy-button" id="buy-standard" onclick="buyStandard()">Buy Now</button>
                     </div>
                 </div>
         
@@ -475,7 +475,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button class="buy-button">Buy Now</button>
+                        <button class="buy-button" id="buy-pro" onclick="buyPro()">Buy Now</button>
                     </div>
                 </div>  
         
@@ -514,7 +514,7 @@
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
                         </div>
-                        <button class="contact-us-button">Contact Us</button>
+                        <button class="contact-us-button" onclick="contactUs()">Contact Us</button>
                     </div>
                 </div>
             </div>
@@ -557,6 +557,34 @@
         }
     }
 
+    function buy(){
+      
+    }
+
+    function buyBasic(){
+      let buy_basic = document.getElementById("buy-basic");
+      let price_basic = document.getElementById('price_basic');
+      price_basic_num = parseInt(price_basic.textContent, 10);
+      console.log(price_basic_num)
+    }
+
+    function buyStandard(){
+      let buy_standard = document.getElementById("buy-standard");
+      let price_standard = document.getElementById('price_standard');
+      price_standard_num = parseInt(price_standard.textContent, 10);
+      console.log(price_standard_num)
+    }
+
+    function buyPro(){
+      let buy_pro = document.getElementById("buy-pro");
+      let price_pro = document.getElementById("price_pro");
+      price_pro_num = parseInt(price_pro.textContent, 10)
+      console.log(price_pro_num);
+    }
+
+    function contactUs(){
+      console.log("redirecting to Contact Support");
+    }
   </script>  
 </body>
 </html>

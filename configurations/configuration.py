@@ -24,7 +24,8 @@ class Configuration:
         CLIENT_SECRET = CLIENT_SECRET
 
     class Ngrok:
-        URL = "https://62dd-49-43-25-97.ngrok-free.app"
+        # URL = "https://62dd-49-43-25-97.ngrok-free.app"
+        URL = "https://popular-lamb-sunny.ngrok-free.app"
 
     class STRIPE_API:
         PUBLICK_KEY = "pk_test_51N1NfgSHA9iK3eg2GgVRnYXM9VFpc2j2BSXXqKE2bbJ28Zk6zUP9fneBdYX74ssz1Kvg6tB3dlreceu6ySnXuSY100p8O2FCE0"
