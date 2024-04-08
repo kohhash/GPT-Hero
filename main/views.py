@@ -231,25 +231,30 @@ def payment_post(request, pk):
     if not request.user.is_authenticated:
         return redirect("account_login")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
-    user = request.user
+    print(stripe.api_key)
+    user = request.user    
+    print(request.method)
     if request.method == 'POST':
-        plan = Plans.objects.get(pk=pk)
-        user_subscription = SubScription.objects.get(user=user)
-        user_subscription.plan = plan
-        user_subscription.save()
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price': plan.stripe_id,
-                    'quantity': 1,
-                },
-            ],
-            mode='subscription',
-            success_url=Configuration.STRIPE_API.REDIRECT_URI + '/payment_successful?session_id={CHECKOUT_SESSION_ID}&user_id=' + str(user.id),
-            cancel_url=Configuration.STRIPE_API.REDIRECT_URI + '/payment_cancelled',
-        )
-        return redirect(checkout_session.url, code=303)
+        if pk == "basic-month":
+            price_id = ""
+        print(pk)
+        print(user.id)
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[
+                    {                        
+                        'price': 'price_1NBbrkImNVsu0KeiEPOf3Gnu',                        
+                        'quantity': 1
+                    },
+                ],
+                mode='subscription',
+                success_url=Configuration.STRIPE_API.REDIRECT_URI + '/payment_successful?session_id={CHECKOUT_SESSION_ID}&user_id=' + str(user.id),
+                cancel_url=Configuration.STRIPE_API.REDIRECT_URI + '/payment_cancelled',
+            )
+            return redirect(checkout_session.url, code=303)
+        except Exception as E:
+            print("error: ", E)
     plans = Plans.objects.all()
     return render(request, "main/plans.html" , {'plans': plans})
 

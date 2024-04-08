@@ -10,7 +10,8 @@ load_dotenv()
 # Access environment variables
 OPEN_API_KEY = os.getenv('OPEN_API_KEY')
 PWAID_KEY = os.getenv('PWAID_KEY')
-PRIVATE_KEY = os.getenv("PRIVATE_KEY")
+# PRIVATE_KEY = os.getenv("PRIVATE_KEY")
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
@@ -28,8 +29,10 @@ class Configuration:
 
     class STRIPE_API:
         PUBLICK_KEY = "pk_test_51N1NfgSHA9iK3eg2GgVRnYXM9VFpc2j2BSXXqKE2bbJ28Zk6zUP9fneBdYX74ssz1Kvg6tB3dlreceu6ySnXuSY100p8O2FCE0"
-        PRIVATE_KEY = PRIVATE_KEY
-        REDIRECT_URI = "http://127.0.0.1:8000"
+        # PRIVATE_KEY = PRIVATE_KEY
+        PRIVATE_KEY = STRIPE_API_KEY
+        # REDIRECT_URI = "http://127.0.0.1:8000"
+        REDIRECT_URI = "http://195.201.56.175:8000"
         STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
 
     class ResourceValues:

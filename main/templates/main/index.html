@@ -526,11 +526,34 @@
         }
     }
     
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    function buyPlan() {      
+        window.location.href = "/accounts/login";        
+    }
+
     function buyBasic(){
       let buy_basic = document.getElementById("buy-basic");
       let price_basic = document.getElementById('price_basic');
-      price_basic_num = parseInt(price_basic.textContent, 10);
-      console.log(price_basic_num)
+      price_basic_num = parseInt(price_basic.textContent, 10);      
+      if(price_basic_num === 5){
+        buyPlan("basic-month");
+      } else{
+        buyPlan("basic-year");
+      }
     }
 
     function buyStandard(){
@@ -538,6 +561,11 @@
       let price_standard = document.getElementById('price_standard');
       price_standard_num = parseInt(price_standard.textContent, 10);
       console.log(price_standard_num)
+      if(price_standard_num === 15){
+        buyPlan("standard-month");
+      } else{
+        buyPlan("standard-year");
+      }
     }
 
     function buyPro(){
@@ -545,6 +573,11 @@
       let price_pro = document.getElementById("price_pro");
       price_pro_num = parseInt(price_pro.textContent, 10)
       console.log(price_pro_num);
+      if(price_pro_num === 30){
+        buyPlan("pro-month");
+      } else {
+        buyPlan("pro-year");
+      }
     }
 
     function contactUs(){
