@@ -23,8 +23,7 @@ class Configuration:
         CLIENT_ID = CLIENT_ID
         CLIENT_SECRET = CLIENT_SECRET
 
-    class Ngrok:
-        # URL = "https://62dd-49-43-25-97.ngrok-free.app"
+    class Ngrok:        
         URL = "https://popular-lamb-sunny.ngrok-free.app"
 
     class STRIPE_API:
