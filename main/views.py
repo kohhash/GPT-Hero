@@ -206,6 +206,7 @@ import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import time
 
+
 def plans_page_view(request):
     plans = Plans.objects.all()
     return render(request, "main/plans.html" , {'plans': plans})
@@ -231,20 +232,36 @@ def payment_post(request, pk):
     if not request.user.is_authenticated:
         return redirect("account_login")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
+    def find_product_id_by_name(product_name):
+        # List all products and find the matching product ID(s)
+        response = stripe.Product.list(limit=100)  # You can paginate through products if necessary
+        for product in response.auto_paging_iter():
+            if product['name'] == product_name:
+                yield product['id']
+
+    def find_price_ids_by_product_id(product_id):
+        # List all prices for the given product ID
+        response = stripe.Price.list(limit=100)  # You can paginate through prices if necessary
+        for price in response.auto_paging_iter():
+            if price['product'] == product_id:
+                yield price['id']
+    price_id = ""
+    for product_id in find_product_id_by_name(pk):    
+        for _price_id in find_price_ids_by_product_id(product_id):
+            price_id = _price_id
+
     print(stripe.api_key)
     user = request.user    
     print(request.method)
     if request.method == 'POST':
-        if pk == "basic-month":
-            price_id = ""
-        print(pk)
         print(user.id)
         try:
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=[
                     {                        
-                        'price': 'price_1NBbrkImNVsu0KeiEPOf3Gnu',                        
+                        # 'price': 'price_1NBbrkImNVsu0KeiEPOf3Gnu',
+                        'price': price_id,
                         'quantity': 1
                     },
                 ],
