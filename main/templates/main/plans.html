@@ -573,28 +573,19 @@
     }
 
     function buyPlan(planId) {
-      // Making a POST request using the fetch API
-      fetch('/plans/' + planId + '/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;',
-          // If needed, additional headers go here (e.g. CSRF token)
-          'X-CSRFToken': getCookie('csrftoken') // Assuming CSRF token is stored as a cookie
-        },      
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok.');
-        }
-        return response.text();
-      })
-      .then(result => {
-        // This result should be the URL to redirect to for the Stripe checkout session
-        window.location.href = result;
-      })
-      .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-      });
+      var form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/plans/' + planId + '/';
+      
+      // CSRF token is required for POST requests in Django
+      var csrfTokenInput = document.createElement('input');
+      csrfTokenInput.type = 'hidden';
+      csrfTokenInput.name = 'csrfmiddlewaretoken';
+      csrfTokenInput.value = getCookie('csrftoken'); // Assuming CSRF token is stored as a cookie
+      form.appendChild(csrfTokenInput);
+      
+      document.body.appendChild(form);
+      form.submit();
     }
 
     function buyBasic(){
