@@ -81,13 +81,25 @@ def profile_view(request):
         return render(request, "main/profile.html", {"form":form, "user":user, "user_fields":user_fields, "stripe_url":stripe_url, "essays":essays})
 
     if request.method == "POST":
+        if 'prompt-submit' in request.POST:
+            # print(request.POST)
+            print("#"*100)
+            for each in request.POST:
+                print(each, request.POST[each])
+            print("#"*100)
+            # print("post_request accepted")
+            # for key, value in request.POST.items():
+            #     print(key, ": ", value)
+            print(user)
+            return render(request, "main/profile.html", {"form":form, "user":user, "user_fields":user_fields, "stripe_url":stripe_url, "essays":essays})
         # form = SetKeyForm(request.POST)
         # if form.is_valid():
             # data=form.cleaned_data
-        data=request.POST
-        if data['openai_api_key']:
-            setattr(user_fields, 'openai_api_key', data['openai_api_key'])
-            user_fields.save()
+        else:
+            data=request.POST
+            if data['openai_api_key']:
+                setattr(user_fields, 'openai_api_key', data['openai_api_key'])
+                user_fields.save()
     return redirect('profile')
     # return render(request, "main/gpt.html", {"form": form, "user":user, "user_fields":user_fields, "stripe_url":stripe_url, "essays":essays})
     
