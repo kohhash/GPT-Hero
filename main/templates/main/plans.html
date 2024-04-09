@@ -571,6 +571,101 @@
       }
       return cookieValue;
     }
+    // Create and append the custom confirm dialog elements to the body
+    function createConfirmDialog(message, onConfirm) {
+      // Create the dialog container with a modern look
+      const dialogOverlay = document.createElement('div');
+      dialogOverlay.id = 'confirmDialog';
+      dialogOverlay.style.position = 'fixed';
+      dialogOverlay.style.left = '0';
+      dialogOverlay.style.top = '0';
+      dialogOverlay.style.width = '100%';
+      dialogOverlay.style.height = '100%';
+      dialogOverlay.style.backgroundColor = 'rgba(100, 100, 100, 0.5)';      
+      dialogOverlay.style.display = 'flex';
+      dialogOverlay.style.justifyContent = 'center';
+      dialogOverlay.style.alignItems = 'center';
+      dialogOverlay.style.zIndex = '1000';      
+      // Apply blur effect using backdrop-filter
+      dialogOverlay.style.backdropFilter = 'blur(10px)'; // Standard syntax
+      dialogOverlay.style.webkitBackdropFilter = 'blur(10px)'; // For Safari and older browsers
+
+      // Modern styled dialog content area
+      const dialogContent = document.createElement('div');
+      dialogContent.className = 'dialog-content';
+      dialogContent.style.background = '#111';
+      dialogContent.style.padding = '40px';
+      dialogContent.style.borderRadius = '12px';
+      dialogContent.style.boxShadow = '0 4px 8px rgba(250, 250, 250, 0.1)';
+      dialogContent.style.textAlign = 'center';
+      dialogContent.style.maxWidth = '400px';
+      dialogContent.style.boxSizing = 'border-box';
+
+      // Message with modern text styling
+      const dialogMessage = document.createElement('p');
+      dialogMessage.textContent = message;
+      dialogMessage.style.fontSize = '18px';
+      dialogMessage.style.color = '#fff';
+      dialogMessage.style.marginBottom = '30px';
+      dialogContent.appendChild(dialogMessage);
+
+      // Create the confirm button
+      const confirmBtn = document.createElement('button');
+      confirmBtn.id = 'confirmBtn';
+      confirmBtn.textContent = 'Current Plan';
+      confirmBtn.style.padding = '10px 15px';
+      confirmBtn.style.marginRight = '10px';
+      confirmBtn.style.border = 'none';
+      confirmBtn.style.borderRadius = '10px';
+      confirmBtn.style.color = 'white';
+      confirmBtn.style.backgroundImage = 'linear-gradient(to right, #4444ff 0%, #4444ff 100%)'; // Gradient color effect
+      confirmBtn.style.cursor = 'pointer';
+      confirmBtn.style.marginRight = '18px';
+      confirmBtn.onclick = function() {
+        // Run the onConfirm callback if provided
+        if (typeof onConfirm === 'function') {
+          onConfirm();
+        }
+        // Hide and remove the dialog after confirmation
+        document.body.removeChild(dialogOverlay);
+      };
+
+      // Create the cancel button
+      const cancelBtn = document.createElement('button');
+      cancelBtn.id = 'cancelBtn';
+      cancelBtn.textContent = 'Not Buy Now';
+      cancelBtn.style.padding = '10px 15px';
+      cancelBtn.style.border = 'none';
+      cancelBtn.style.borderRadius = '10px';
+      cancelBtn.style.background = '#ecf0f1'; // Light grey background
+      cancelBtn.style.color = '#333';
+      cancelBtn.style.cursor = 'pointer';
+      cancelBtn.style.marginLeft = '18px';
+      cancelBtn.onclick = function() {
+        // Hide and remove the dialog
+        document.body.removeChild(dialogOverlay);
+      };
+
+      // Append buttons to dialog content
+      dialogContent.appendChild(confirmBtn);
+      dialogContent.appendChild(cancelBtn);
+
+      // Append dialog content to the dialog container
+      dialogOverlay.appendChild(dialogContent);
+
+      // Append the dialog to the body
+      document.body.appendChild(dialogOverlay);
+    }
+
+    // Call this function when you want to show confirmation
+    function showCustomConfirm(message, onConfirm) {
+      createConfirmDialog(message, onConfirm);
+    }
+
+    // // Example usage:
+    // showCustomConfirm('Are you sure you want to do this?', function() {
+    //   console.log('Confirmed!');
+    // });
 
     function buyPlan(planId) {
       var form = document.createElement('form');
@@ -588,14 +683,20 @@
       form.submit();
     }
 
+    function confirmAndBuyPlan(planId) {
+      showCustomConfirm('Are you sure you want to buy this plan?', function() {
+        buyPlan(planId);
+      });
+    }
+
     function buyBasic(){
       let buy_basic = document.getElementById("buy-basic");
       let price_basic = document.getElementById('price_basic');
       price_basic_num = parseInt(price_basic.textContent, 10);      
       if(price_basic_num === 5){
-        buyPlan("basic-month");
+        confirmAndBuyPlan("basic-month");
       } else{
-        buyPlan("basic-year");
+        confirmAndBuyPlan("basic-year");
       }
     }
 
@@ -605,9 +706,9 @@
       price_standard_num = parseInt(price_standard.textContent, 10);
       console.log(price_standard_num)
       if(price_standard_num === 15){
-        buyPlan("standard-month");
+        confirmAndBuyPlan("standard-month");
       } else{
-        buyPlan("standard-year");
+        confirmAndBuyPlan("standard-year");
       }
     }
 
@@ -617,9 +718,9 @@
       price_pro_num = parseInt(price_pro.textContent, 10)
       console.log(price_pro_num);
       if(price_pro_num === 30){
-        buyPlan("pro-month");
+        confirmAndBuyPlan("pro-month");
       } else {
-        buyPlan("pro-year");
+        confirmAndBuyPlan("pro-year");
       }
     }
 
