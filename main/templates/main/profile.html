@@ -42,7 +42,7 @@
             align-items: start; 
         }
         .card_content {
-            width: 80%;
+            width: 100%;
             margin-left: 10px;
             margin-top: 10px;
             display: flex;
@@ -131,6 +131,24 @@
             border-width: 1px;
             --tw-shadow: 0 0 #0000;
         }
+
+        .save-settings-btn {
+            margin-top: 20px;
+            background-color: #4CAF50; /* Green background color */
+            color: white; /* White text color */
+            padding: 10px 20px; /* Padding around the text */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            text-align: center; /* Center text */
+            display: inline-block; /* Display as inline-block */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Cursor style on hover */
+            transition: background-color 0.3s; /* Smooth transition for background color change */
+        }
+
+        .save-settings-btn:hover {
+            background-color: #45a049; /* Darker green color on hover */
+        }
     </style>
 </head>
 <body>
@@ -163,91 +181,97 @@
         </div>
         <div class="box" style="flex-direction: column; gap: 5vh; padding-bottom: 10vh;">          
           <div class="card_shadow">
-            <div class="card_content">
-                <div style="height: 10%; margin-left: 8px;">
-                    <label style="font-size: 24px; color: white"><b>Choose Approach:</b></label>
-                </div>
-                <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
-                    <div style="width: 30%; display: flex; flex-direction: row;">
-                        <input  type="radio" id="conservative" name="approach" value="Conservative" style="margin-top: 6px;" />
-                        <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Conservative</b></label>
+            <form method="post" style="width: 80%;">
+                {% csrf_token %}
+                <div class="card_content">
+                    <div style="height: 10%; margin-left: 8px;">
+                        <label style="font-size: 24px; color: white"><b>Choose Approach:</b></label>
                     </div>
-                    <div style="width: 3%;"></div>
-                    <div style="width: 10%; display: flex; flex-direction: row; margin-left: 30px;">
-                        <input  type="radio" id="creative" name="approach" value="Creative" style="margin-top: 6px;" onclick="toggleInputVisibility()" checked/>
-                        <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Creative</b></label>
-                    </div>
-                </div>
-                <div class="line"></div>
-                <div style="height: 10%; margin-left: 8px; margin-top: 20px;">
-                    <label style="font-size: 24px; color: white"><b>Choose Model:</b></label>
-                </div>
-                <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
-                    <div style="width: 30%; display: flex; flex-direction: row;">
-                        <input  type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;"/>
-                        <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-3</b></label>
-                    </div>
-                    <div></div>
-                    <div style="width: 20%; display: flex; flex-direction: row; margin-left: 45px;">
-                        <input  type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" checked/>
-                        <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-4</b></label>
-                    </div>
-                </div>
-                <div class="line"></div>
-                <div style="height: 10%; margin-top: 20px;">
-                    <label style="margin: 10px; font-size: 24px; color: white;"><b>Advanced Features</b></label>
-                </div>
-                <div style="height: 10%; margin-top: 20px; display: flex; flex-direction: row; margin-left: 12px;">
-                    <div style="width: 25%;">
-                        <input type="checkbox" id="context" name="context" value="context" checked>
-                        <label style="font-size: 16px; margin: 10px; color: white;">Context</label>
-                    </div>
-                    <div style="width: 30%; display: flex; flex-direction: row; margin-left: 40px;">
-                        <label style="font-size: 16px; color: white; margin-top: 0; margin-left: 30px;">Randomness</label>
-                        <input style="margin-top: -25px; width: 100px; margin-left: 10px;" type="range" min="1" max="10" value="5" id="randomness" name="randomness" oninput="updateRangeValue(this.value)">
-                        <span id="rangeValue" style="margin-left: 10px; color: white;">5</span>
-                    </div>
-                </div>
-                <div style="height: 40%;" id="labelInput">
-                    <div style="height: 10%; display: flex; flex-direction: row; margin-top: 20px;">
-                        <div style="width: 20%;">
-                            <label style="font-size: 16px; margin: 10px; color: white;">Tone</label>
+                    <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
+                        <div style="width: 30%; display: flex; flex-direction: row;">
+                            <input type="radio" id="conservative" name="approach" value="Conservative" style="margin-top: 6px;" />
+                            <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Conservative</b></label>
                         </div>
-                        <div style="width: 5%;"></div>
-                        <div style="width: 10%;">
-                            <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="tone" id="tone" value="newspaper" type="text">
-                        </div>
-                        
-                    </div>
-                    <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
-                        <div style="width: 20%;">
-                            <label style="font-size: 16px; margin: 10px; color: white;">Difficulty</label>
-                        </div>
-                        <div style="width: 5%;"></div>
-                        <div style="width: 10%;">
-                            <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="difficulty" id="difficulty" value="easy to understand, very common" type="text">
+                        <div style="width: 3%;"></div>
+                        <div style="width: 10%; display: flex; flex-direction: row; margin-left: 30px;">
+                            <input type="radio" id="creative" name="approach" value="Creative" style="margin-top: 6px;" onclick="toggleInputVisibility()" checked/>
+                            <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Creative</b></label>
                         </div>
                     </div>
-                    <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
-                        <div style="width: 20%;">
-                            <label style="font-size: 16px; margin: 10px; color: white;">Adjectives</label>
+                    <div class="line"></div>
+                    <div style="height: 10%; margin-left: 8px; margin-top: 20px;">
+                        <label style="font-size: 24px; color: white"><b>Choose Model:</b></label>
+                    </div>
+                    <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
+                        <div style="width: 30%; display: flex; flex-direction: row;">
+                            <input type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;"/>
+                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-3</b></label>
                         </div>
-                        <div style="width: 5%;"></div>
-                        <div style="width: 10%;">
-                            <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="adj" id="adj" value="concise and precise, to the point" type="text">
+                        <div></div>
+                        <div style="width: 20%; display: flex; flex-direction: row; margin-left: 45px;">
+                            <input type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" checked/>
+                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-4</b></label>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                    <div style="height: 10%; margin-top: 20px;">
+                        <label style="margin: 10px; font-size: 24px; color: white;"><b>Advanced Features</b></label>
+                    </div>
+                    <div style="height: 10%; margin-top: 20px; display: flex; flex-direction: row; margin-left: 12px;">
+                        <div style="width: 25%;">
+                            <input type="checkbox" id="context" name="context" value="context" checked>
+                            <label style="font-size: 16px; margin: 10px; color: white;">Context</label>
+                        </div>
+                        <div style="width: 30%; display: flex; flex-direction: row; margin-left: 40px;">
+                            <label style="font-size: 16px; color: white; margin-top: 0; margin-left: 30px;">Randomness</label>
+                            <input style="margin-top: -25px; width: 100px; margin-left: 10px;" type="range" min="1" max="10" value="5" id="randomness" name="randomness" oninput="updateRangeValue(this.value)">
+                            <span id="rangeValue" style="margin-left: 10px; color: white;">5</span>
+                        </div>
+                    </div>
+                    <div style="height: 40%;" id="labelInput">
+                        <div style="height: 10%; display: flex; flex-direction: row; margin-top: 20px;">
+                            <div style="width: 20%;">
+                                <label style="font-size: 16px; margin: 10px; color: white;">Tone</label>
+                            </div>
+                            <div style="width: 5%;"></div>
+                            <div style="width: 10%;">
+                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="tone" id="tone" value="newspaper" type="text">
+                            </div>
+                            
+                        </div>
+                        <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
+                            <div style="width: 20%;">
+                                <label style="font-size: 16px; margin: 10px; color: white;">Difficulty</label>
+                            </div>
+                            <div style="width: 5%;"></div>
+                            <div style="width: 10%;">
+                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="difficulty" id="difficulty" value="easy to understand, very common" type="text">
+                            </div>
+                        </div>
+                        <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
+                            <div style="width: 20%;">
+                                <label style="font-size: 16px; margin: 10px; color: white;">Adjectives</label>
+                            </div>
+                            <div style="width: 5%;"></div>
+                            <div style="width: 10%;">
+                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="adj" id="adj" value="concise and precise, to the point" type="text">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>                
+                <div style="text-align: -webkit-center;">
+                    <button type="submit" name="prompt-submit" class="save-settings-btn">Save Settings</button>
+                </div>
+            </form>                
           </div>
-          <div class="container">
+          <div class="container" style="height: auto; padding:30px">
             <form action="{% url 'profile' %}" method="post" class="signup-form">
                 {% csrf_token %}
                 <label for="openapi" class="form-label"><b>OpenAI API key</b></label>
                 <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box">
                 {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
                 <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %}
-                 <button type="submit" class="signupbtn">Set</button>   
+                 <button type="submit" name="set-apikey" class="signupbtn">Set</button>   
                  <div>
                     <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5>
                     <h5 id="openApiKey" style="margin-top:10px;">********************************</h5>
@@ -276,25 +300,25 @@
                     {% endif %}
                 </div>
             </form>
-            <div class="essay" style="width: 95%;">
-                    <div class="partition1" style="height: 100%;overflow: scroll;">
-                    <h3 style="margin-left:30px; margin-top:30px">Original Essay</h3>
-                    <ol>
-                    {% for essay in essays %}
-                        <li><p>{{essay.original_essay}}</p></li>
-                    {% endfor %}
-                    </ol>
-                 
-                    </div>
-                    <div class="partition2" style="height: 100%;overflow: scroll;">
-                    <h3 style="margin-left:30px; margin-top:30px">Rephrased Essay</h3>
-                    <ol>
-                    {% for essay in essays %}
-                        <li><p>{{essay.rephrased_essay}}</p></li>
-                    {% endfor %}
-                    </ol>
-                    </div>
-            </div>
+            <!-- <div class="essay" style="width: 95%;">
+                <div class="partition1" style="height: 100%;overflow: scroll;">
+                <h3 style="margin-left:30px; margin-top:30px">Original Essay</h3>
+                <ol>
+                {% for essay in essays %}
+                    <li><p>{{essay.original_essay}}</p></li>
+                {% endfor %}
+                </ol>
+                
+                </div>
+                <div class="partition2" style="height: 100%;overflow: scroll;">
+                <h3 style="margin-left:30px; margin-top:30px">Rephrased Essay</h3>
+                <ol>
+                {% for essay in essays %}
+                    <li><p>{{essay.rephrased_essay}}</p></li>
+                {% endfor %}
+                </ol>
+                </div>
+            </div> -->
             <!-- Settings part -->
             
           </div>
