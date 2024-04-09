@@ -1,6 +1,7 @@
 from django import forms
 
 class RephraseForm(forms.Form):
+    print("rephrase form called....")
     approach = forms.ChoiceField(
         label="Choose Approach",
         choices=[("Conservative", "Conservative"), ("Creative", "Creative")],
