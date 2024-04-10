@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 
 from .models import Essays , Plans , PlansFeatures , SubScription 
+from .models import SettingsModel
+from .forms import SettingsModelForm    
 from .stripe_handler import stripe_purchase_url, stripe_special_purchase_url, cancel_subscription
 from .forms import RephraseForm, SetKeyForm, SetRephraseForm
 from django.contrib import messages
@@ -77,8 +79,6 @@ def profile_view(request):
         essays=None
     form = SetKeyForm()
     print(request.method)
-    from .models import SettingsModel
-    from .forms import SettingsModelForm
     settings_form = SettingsModelForm()
     try:
         settings = SettingsModel.objects.get(user=user)
@@ -174,19 +174,22 @@ def home_view(request):
 
     if request.method == "GET":
         return render(request, "main/home.html", {"request":request, "result":reph_essay, "orig":orig_essay, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
+
+    user=User.objects.get(username=request.user)
+    settings = SettingsModel.objects.get(user=user)
     
     essay=request.POST.get('textarea')
-    approach=request.POST.get('approach')
-    context=request.POST.get('context')
+    approach=settings.approach
+    context=settings.context
     if context==None:
         context=False
     else:
         context=True
-    randomness=int(request.POST.get('randomness'))
-    tone=request.POST.get('tone')
-    difficulty=request.POST.get('difficulty')
-    additional_adjectives=request.POST.get('adjectives')
-    model=request.POST.get('model')
+    randomness=settings.randomness
+    tone=settings.tone
+    difficulty=settings.difficulty
+    additional_adjectives=settings.adj
+    model=settings.model
     if request.user.subscription.is_active==False:
         openai_api_key=UserExtraFields.objects.get(user=request.user).openai_api_key
         if openai_api_key == "" or openai_api_key == None or str(openai_api_key).strip() == "":
