@@ -37,3 +37,13 @@ class SubScription(models.Model):
     customer_id=models.CharField(max_length=512 , null=True, blank=True)
     def __str__(self):
         return self.user.username + " - " + str(self.is_active)
+    
+class SettingsModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    approach = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+    context = models.BooleanField(default=False)
+    randomness = models.IntegerField(default=1)
+    tone = models.CharField(max_length=100)
+    difficulty = models.CharField(max_length=100)
+    adj = models.CharField(max_length=100)

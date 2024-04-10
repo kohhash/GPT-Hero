@@ -1,4 +1,5 @@
 from django import forms
+from .models import SettingsModel
 
 class RephraseForm(forms.Form):
     print("rephrase form called....")
@@ -26,3 +27,17 @@ class SetKeyForm(forms.Form):
 
     openai_api_key = forms.CharField(label="OpenAI API key", max_length=100, required=False)
     prowritingaid_api_key = forms.CharField(label="ProWritingAid API key", max_length=100, required=False)
+
+class SetRephraseForm(forms.Form):
+    approach = forms.CharField(max_length=100)
+    model = forms.CharField(max_length=100)
+    context = forms.CharField(max_length=100)
+    randomness = forms.IntegerField()
+    tone = forms.CharField(max_length=100)
+    difficulty = forms.CharField(max_length=100)
+    adj = forms.CharField(max_length=100)
+
+class SettingsModelForm(forms.ModelForm):
+    class Meta:
+        model = SettingsModel
+        fields = ['approach', 'model', 'context', 'randomness', 'tone', 'difficulty', 'adj']

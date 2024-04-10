@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from .models import Essays , Plans , PlansFeatures , SubScription 
 from .stripe_handler import stripe_purchase_url, stripe_special_purchase_url, cancel_subscription
-from .forms import RephraseForm, SetKeyForm
+from .forms import RephraseForm, SetKeyForm, SetRephraseForm
 from django.contrib import messages
 import stripe
 from configurations.configuration import Configuration
@@ -76,33 +76,76 @@ def profile_view(request):
     if len(essays)==0:
         essays=None
     form = SetKeyForm()
-
-    if request.method == "GET":
-        return render(request, "main/profile.html", {"form":form, "user":user, "user_fields":user_fields, "stripe_url":stripe_url, "essays":essays})
-
+    print(request.method)
+    from .models import SettingsModel
+    from .forms import SettingsModelForm
+    settings_form = SettingsModelForm()
+    try:
+        settings = SettingsModel.objects.get(user=user)
+        initial_data = {
+            'approach': settings.approach,
+            'model': settings.model,
+            'context': settings.context,
+            'randomness': settings.randomness,
+            'tone': settings.tone,
+            'difficulty': settings.difficulty,
+            'adj': settings.adj,
+        }
+        print(initial_data)
+        settings_form = SettingsModelForm(instance=settings)
+    except SettingsModel.DoesNotExist:
+        settings_form = SettingsModelForm()
+    
     if request.method == "POST":
-        if 'prompt-submit' in request.POST:
-            # print(request.POST)
-            print("#"*100)
-            for each in request.POST:
-                print(each, request.POST[each])
-            print("#"*100)
-            # print("post_request accepted")
-            # for key, value in request.POST.items():
-            #     print(key, ": ", value)
-            print(user)
-            return render(request, "main/profile.html", {"form":form, "user":user, "user_fields":user_fields, "stripe_url":stripe_url, "essays":essays})
-        # form = SetKeyForm(request.POST)
-        # if form.is_valid():
-            # data=form.cleaned_data
+        if 'settings-form-submit' in request.POST:            
+            approach = request.POST.get('approach')
+            model = request.POST.get('model')
+            context = request.POST.get('context', False)
+            if context == "context":
+                context = True
+            else: context = False            
+            randomness = int(request.POST.get('randomness'))
+            tone = request.POST.get('tone')
+            difficulty = request.POST.get('difficulty')
+            adj = request.POST.get('adj')
+            print(randomness)
+            # Retrieve the existing settings for the user
+            try:
+                print("creating settings storage")
+                settings, _ = SettingsModel.objects.get_or_create(user=user)
+                print("set settings attributes")
+                # Update the settings with the new form data
+                settings.approach = approach
+                settings.model = model
+                settings.context = context
+                settings.randomness = randomness
+                settings.tone = tone
+                settings.difficulty = difficulty
+                settings.adj = adj
+
+                print(settings)
+
+                # Save the updated settings to the database
+                settings.save()
+
+                return redirect('profile')
+            except Exception as e:
+                print(e)
         else:
             data=request.POST
             if data['openai_api_key']:
                 setattr(user_fields, 'openai_api_key', data['openai_api_key'])
                 user_fields.save()
-    return redirect('profile')
-    # return render(request, "main/gpt.html", {"form": form, "user":user, "user_fields":user_fields, "stripe_url":stripe_url, "essays":essays})
-    
+    # Render the template with the settings form and other data
+    return render(request, "main/profile.html", {
+        "settings_form": settings_form,
+        "user": user,
+        "user_fields": user_fields,
+        "stripe_url": stripe_url,
+        "essays": essays
+    })
+
+
 def landing_view(request):
 
     if request.user.is_authenticated:

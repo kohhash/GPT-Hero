@@ -183,18 +183,19 @@
           <div class="card_shadow">
             <form method="post" style="width: 80%;">
                 {% csrf_token %}
+                <input type="hidden" name="form_type" value="settings_form">
                 <div class="card_content">
                     <div style="height: 10%; margin-left: 8px;">
                         <label style="font-size: 24px; color: white"><b>Choose Approach:</b></label>
                     </div>
                     <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
                         <div style="width: 30%; display: flex; flex-direction: row;">
-                            <input type="radio" id="conservative" name="approach" value="Conservative" style="margin-top: 6px;" />
-                            <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Conservative</b></label>
+                            <input type="radio" id="conservative" name="approach" value="Conservative" style="margin-top: 6px;" {% if settings_form.approach.value == 'Conservative' %}checked{% endif %}/>
+                            <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Conservative</b></label>                            
                         </div>
                         <div style="width: 3%;"></div>
                         <div style="width: 10%; display: flex; flex-direction: row; margin-left: 30px;">
-                            <input type="radio" id="creative" name="approach" value="Creative" style="margin-top: 6px;" onclick="toggleInputVisibility()" checked/>
+                            <input type="radio" id="creative" name="approach" value="Creative" style="margin-top: 6px;" onclick="toggleInputVisibility()" {% if settings_form.approach.value == 'Creative' %}checked{% endif %}/>
                             <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Creative</b></label>
                         </div>
                     </div>
@@ -204,12 +205,12 @@
                     </div>
                     <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
                         <div style="width: 30%; display: flex; flex-direction: row;">
-                            <input type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;"/>
+                            <input type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;" {% if settings_form.model.value == 'GPT-3' %}checked{% endif %}/>
                             <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-3</b></label>
                         </div>
                         <div></div>
                         <div style="width: 20%; display: flex; flex-direction: row; margin-left: 45px;">
-                            <input type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" checked/>
+                            <input type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" {% if settings_form.model.value == 'GPT-4' %}checked{% endif %}/>
                             <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-4</b></label>
                         </div>
                     </div>
@@ -219,13 +220,13 @@
                     </div>
                     <div style="height: 10%; margin-top: 20px; display: flex; flex-direction: row; margin-left: 12px;">
                         <div style="width: 25%;">
-                            <input type="checkbox" id="context" name="context" value="context" checked>
+                            <input type="checkbox" id="context" name="context" value="context" {% if settings_form.context.value == True %}checked{% endif %}>
                             <label style="font-size: 16px; margin: 10px; color: white;">Context</label>
                         </div>
                         <div style="width: 30%; display: flex; flex-direction: row; margin-left: 40px;">
                             <label style="font-size: 16px; color: white; margin-top: 0; margin-left: 30px;">Randomness</label>
-                            <input style="margin-top: -25px; width: 100px; margin-left: 10px;" type="range" min="1" max="10" value="5" id="randomness" name="randomness" oninput="updateRangeValue(this.value)">
-                            <span id="rangeValue" style="margin-left: 10px; color: white;">5</span>
+                            <input style="margin-top: -25px; width: 100px; margin-left: 10px;" type="range" min="1" max="10" {% if settings_form.randomness.value %}value="{{ settings_form.randomness.value }}"{% endif %} id="randomness" name="randomness" oninput="updateRangeValue(this.value)">
+                            <span id="rangeValue" style="margin-left: 10px; color: white;">{{settings_form.randomness.value}}</span>
                         </div>
                     </div>
                     <div style="height: 40%;" id="labelInput">
@@ -235,7 +236,7 @@
                             </div>
                             <div style="width: 5%;"></div>
                             <div style="width: 10%;">
-                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="tone" id="tone" value="newspaper" type="text">
+                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="tone" id="tone" value="{{ settings_form.tone.value|default_if_none:'' }}" type="text">
                             </div>
                             
                         </div>
@@ -245,7 +246,7 @@
                             </div>
                             <div style="width: 5%;"></div>
                             <div style="width: 10%;">
-                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="difficulty" id="difficulty" value="easy to understand, very common" type="text">
+                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="difficulty" id="difficulty" value="{{ settings_form.difficulty.value|default_if_none:'easy to understand, very common' }}" type="text">
                             </div>
                         </div>
                         <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
@@ -254,13 +255,13 @@
                             </div>
                             <div style="width: 5%;"></div>
                             <div style="width: 10%;">
-                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="adj" id="adj" value="concise and precise, to the point" type="text">
+                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="adj" id="adj" value="{{ settings_form.adj.value|default_if_none:'concise and precise, to the point' }}" type="text">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div style="text-align: -webkit-center;">
-                    <button type="submit" name="prompt-submit" class="save-settings-btn">Save Settings</button>
+                    <button type="submit" name="settings-form-submit" class="save-settings-btn">Save Settings</button>
                 </div>
             </form>                
           </div>
@@ -269,8 +270,8 @@
                 {% csrf_token %}
                 <label for="openapi" class="form-label"><b>OpenAI API key</b></label>
                 <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box">
-                {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
-                <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %}
+                <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
+                <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
                  <button type="submit" name="set-apikey" class="signupbtn">Set</button>   
                  <div>
                     <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5>
