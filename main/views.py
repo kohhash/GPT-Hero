@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
-from app.essay_rephraser import process_essay, prompt_generator
+from app.essay_rephraser import process_essay
 from app.load_resources import ResourceValues
 from app.ai_detector import copyleaks_detector, gptzero_detector
 from accounts.models import UserExtraFields
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 
-from .models import Essays , Plans , PlansFeatures , SubScription 
+from .models import Essays , Plans , SubScription 
 from .models import SettingsModel
 from .forms import SettingsModelForm    
 from .stripe_handler import stripe_purchase_url, stripe_special_purchase_url, cancel_subscription
-from .forms import RephraseForm, SetKeyForm, SetRephraseForm
+from .forms import SetKeyForm
 from django.contrib import messages
 import stripe
 from configurations.configuration import Configuration
@@ -203,13 +203,8 @@ def home_view(request):
             messages.warning(request, "Your subscription has expired or usage is exceed! Please upgrade or renew your plan or add your own api key on profile.")
             return redirect("plans")
         openai_api_key=Configuration.DefaultValues.OPEN_API_KEY
-
-    # form = RephraseForm()
-    # if request.method == "POST":
-        # form = RephraseForm(request.POST)
-        # if form.is_valid():
+    
     try:
-        # data = form.cleaned_data
         rephrase_essay = process_essay(
             essay=essay,
             approach=approach,
