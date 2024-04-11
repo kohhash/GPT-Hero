@@ -80,8 +80,10 @@ def profile_view(request):
     form = SetKeyForm()
     print(request.method)
     settings_form = SettingsModelForm()
+    print('tring')
     try:
         settings = SettingsModel.objects.get(user=user)
+        print(settings)
         initial_data = {
             'approach': settings.approach,
             'model': settings.model,
@@ -94,7 +96,15 @@ def profile_view(request):
         print(initial_data)
         settings_form = SettingsModelForm(instance=settings)
     except SettingsModel.DoesNotExist:
-        settings_form = SettingsModelForm()
+        settings_form = SettingsModelForm(initial={
+        "approach": "Conservative",
+        'model': "GPT-3",
+        "context": True,
+        "randomness": 7,
+        "tone": "",
+        "difficulty": "easy to understand, very common",
+        'adj': "concise and precise, to the point"
+    })
     
     if request.method == "POST":
         if 'settings-form-submit' in request.POST:            
@@ -350,12 +360,14 @@ def payment_successful(request):
 
 @csrf_exempt
 def payment_cancelled(request):
+    print("payment-canceled")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
     return render(request, 'main/payment_cancelled.html')
 
 
 @csrf_exempt
 def stripe_webhook(request):
+    print("payment succeed")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
     payload = request.body
     time.sleep(10)
@@ -399,6 +411,7 @@ def stripe_webhook(request):
 
 ## check if user is subscribed or not and has permission to rephrase
 def check_user_subscription(user):
+    print("user subscription")
     user_subscription = SubScription.objects.get(user=user)
     user_usage = user_subscription.usage
     user_plan = user_subscription.plan.words_length
