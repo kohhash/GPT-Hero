@@ -529,6 +529,7 @@
   <script>      
     let basic_btn = document.getElementById('buy-basic');
     let buy_style = basic_btn.style;
+    let buy_text = basic_btn.textContent;
     function enable_disable_buy_btns(){
       var currentPlan = "{{current_plan}}";
       let basic_btn = document.getElementById('buy-basic');
@@ -537,6 +538,9 @@
       basic_btn.style = buy_style;
       standard_btn.style = buy_style;
       pro_btn.style = buy_style;
+      basic_btn.textContent = buy_text;
+      standard_btn.textContent = buy_text;
+      pro_btn.textContent = buy_text;
       // console.log(buy_style);
       let paied_plan = null;
 
