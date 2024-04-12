@@ -150,218 +150,352 @@
             background-color: #45a049; /* Darker green color on hover */
         }
 
-        
+        .ncontainer{
+            width: 100%;
+            margin-left: 70px;
+            margin-right: 70px;
+            padding-left: 12px;
+            padding-right: 12px;
+            display: flex;       
+            flex-wrap: inherit;
+            align-items: center;
+            justify-content: space-between;     
+        }
+        .navbar{
+            padding-top:8px !important;
+            padding-bottom: 8px !important;
+            padding-left: 0px;
+            padding-right: 0px;   
+            width:auto;         
+        }
+        .navbar-light .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='grey' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M1 2h14M1 8h14M1 14h14'/%3E%3C/svg%3E");
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: white;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover,
+        .navbar-dark .navbar-nav .nav-link:focus {
+            color: white;
+        }
+
+        .main{
+            margin-left: 75px;
+        }
+        .me-2 {
+            margin-right: .5rem !important;
+        }
     </style>
 </head>
 <body>
     {% block content %}
-    {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show   " style="margin : 150px 150px 0 150px " role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-    {% endif %}
-
-    <div class="navbar-pos">
-    <nav class="fix navbar navbar-expand-lg navbar-dark bg-black sticky">
-        <a class="navbar-brand" href="#">
-            <img src="{% static "main/pic.png" %}" alt="logo" height="40">
+     <!-- Navbar 1 (Top navbar) -->
+  <nav class="navbar navbar-dark bg-black d-none d-md-flex">
+    <div class="ncontainer">
+      <a class="navbar-brand" href="#">
+        <img src="{% static "main/pic.png" %}" height="50" width="200" class="d-inline-block align-top" alt="">
+      </a>
+      <a style="color: white; font-size: 20px; margin-right: 20px">{{request.user}}</a>
+      <!-- <div id="drop">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false" style="color: white; font-size: 20px; margin-right: 20px">
+          {{request.user}}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-    </nav>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout_redirect' %}">Logout</a></li>
+        </ul>
+      </div> -->
     </div>
-    <div class ="head-body">
-        <div class="main-head">     
-        <h1 class="head-size"><span class="red-text">Welcome</span>, {{user}}</h1>
-        </div>
-        <div class="box" style="flex-direction: column; gap: 5vh; padding-bottom: 10vh;">          
-          <div class="card_shadow">
-            <form method="post" style="width: 80%;">
-                {% csrf_token %}
-                <input type="hidden" name="form_type" value="settings_form">
-                <div class="card_content">
-                    <div style="height: 10%; margin-left: 8px;">
-                        <label style="font-size: 24px; color: white"><b>Choose Approach:</b></label>
-                    </div>
-                    <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
-                        <div style="width: 30%; display: flex; flex-direction: row;">
-                            <input type="radio" id="conservative" name="approach" value="Conservative" style="margin-top: 6px;" {% if settings_form.approach.value == 'Conservative' %}checked{% endif %}/>
-                            <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Conservative</b></label>                            
-                        </div>
-                        <div style="width: 3%;"></div>
-                        <div style="width: 10%; display: flex; flex-direction: row; margin-left: 30px;">
-                            <input type="radio" id="creative" name="approach" value="Creative" style="margin-top: 6px;" onclick="toggleInputVisibility()" {% if settings_form.approach.value == 'Creative' %}checked{% endif %}/>
-                            <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Creative</b></label>
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div style="height: 10%; margin-left: 8px; margin-top: 20px;">
-                        <label style="font-size: 24px; color: white"><b>Choose Model:</b></label>
-                    </div>
-                    <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
-                        <div style="width: 30%; display: flex; flex-direction: row;">
-                            <input type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;" {% if settings_form.model.value == 'GPT-3' %}checked{% endif %}/>
-                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>Basic</b></label>
-                        </div>
-                        <div></div>
-                        <div style="width: 20%; display: flex; flex-direction: row; margin-left: 45px;">
-                            <input type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" {% if settings_form.model.value == 'GPT-4' %}checked{% endif %}/>
-                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>Advanced</b></label>
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div style="height: 10%; margin-top: 20px;">
-                        <label style="margin: 10px; font-size: 24px; color: white;"><b>Advanced Features</b></label>
-                    </div>
-                    <div style="height: 10%; margin-top: 20px; display: flex; flex-direction: row; margin-left: 12px;">
-                        <div style="width: 25%;">
-                            <input type="checkbox" id="context" name="context" value="context" {% if settings_form.context.value == True %}checked{% endif %}>
-                            <label style="font-size: 16px; margin: 10px; color: white;">Context</label>
-                        </div>
-                        <div style="width: 30%; display: flex; flex-direction: row; margin-left: 40px;">
-                            <label style="font-size: 16px; color: white; margin-top: 0; margin-left: 30px;">Randomness</label>
-                            <input style="margin-top: -25px; width: 100px; margin-left: 10px;" type="range" min="1" max="10" {% if settings_form.randomness.value %}value="{{ settings_form.randomness.value }}"{% endif %} id="randomness" name="randomness" oninput="updateRangeValue(this.value)">
-                            <span id="rangeValue" style="margin-left: 10px; color: white;">{{settings_form.randomness.value}}</span>
-                        </div>
-                    </div>
-                    <div style="height: 40%;" id="labelInput">
-                        <div style="height: 10%; display: flex; flex-direction: row; margin-top: 20px;">
-                            <div style="width: 20%;">
-                                <label style="font-size: 16px; margin: 10px; color: white;">Tone</label>
-                            </div>
-                            <div style="width: 5%;"></div>
-                            <div style="width: 10%;">
-                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="tone" id="tone" value="{{ settings_form.tone.value|default_if_none:'' }}" type="text">
-                            </div>
-                            
-                        </div>
-                        <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
-                            <div style="width: 20%;">
-                                <label style="font-size: 16px; margin: 10px; color: white;">Difficulty</label>
-                            </div>
-                            <div style="width: 5%;"></div>
-                            <div style="width: 10%;">
-                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="difficulty" id="difficulty" value="{{ settings_form.difficulty.value|default_if_none:'easy to understand, very common' }}" type="text">
-                            </div>
-                        </div>
-                        <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
-                            <div style="width: 20%;">
-                                <label style="font-size: 16px; margin: 10px; color: white;">Adjectives</label>
-                            </div>
-                            <div style="width: 5%;"></div>
-                            <div style="width: 10%;">
-                                <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="adj" id="adj" value="{{ settings_form.adj.value|default_if_none:'concise and precise, to the point' }}" type="text">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align: -webkit-center;">
-                    <button type="submit" name="settings-form-submit" class="save-settings-btn">Save Settings</button>
-                </div>
-            </form>
-            <form action="{% url 'profile' %}" method="post" class="signup-form">
-                {% csrf_token %}
-                <label for="openapi" class="form-label"><b>OpenAI API key</b></label>
-                <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box">
-                <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
-                <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
-                 <button type="submit" name="set-apikey" class="signupbtn">Set</button>   
-                 <div>
-                    <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5>
-                    <h5 id="openApiKey" style="margin-top:10px;">********************************</h5>
-                    {% comment %} <h5 class="red-text" style="margin-top:10px;">ProWriting key set is:</h5>
-                    <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %}
-                </div>
-                <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button>
-                <!-- <div class="form-check" id="hideApiKeyDiv">
-                    {% if user_fields.hide_api_key %}
-                    <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
-                    {% else %}
-                    <input class="form-check-input" type="checkbox" value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
-                    {% endif %}
-                    <label class="form-check-label" for="hide_Api_keys">
-                      Hide API keys Everywhere
-                    </label>
-                  </div>
-                <div class="d-flex">
-                    {% if not user_fields.subscribed %}
-                    <a href="{{stripe_url}}" class="signupbtn" style="margin-right: 15px;">Subscribe</a>
-                    {% else %}
-                    <a href="/cancel_sub/{{user_fields.subscription_id}}/" class="signupbtn" style="margin-right: 15px;">Cancel Subscription</a>
-                    {% endif %}
-                    {% if user.is_staff %}
-                    <a href="/admin" class="signupbtn">Open admin panel</a>
-                    {% endif %}
-                </div> -->
-            </form>               
+  </nav>
+
+
+
+  <!-- Navbar 3 (Top navbar) -->
+  <nav class="navbar navbar-light  d-flex d-md-none" style="background-color: black;">
+    <div class="ncontainer">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" >
+        <span class="navbar-toggler-icon" ></span>
+      </button>
+      <a class="navbar-brand mx-auto" href="#">
+        <img src="{% static "main/pic.png" %}" height="50" width="200" class="d-inline-block align-top" alt="">
+      </a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarCollapse" >
+      <ul class="navbar-nav ml-auto" style="padding: 0px 20px">
+        <!-- Links to all the pages -->
+        <!-- <li class="nav-item">
+          <a href="#" class="nav-link active"
+            style="background-image:linear-gradient( #EC1A3F,#EE376E); height:40px;width:170px" aria-current="page"
+            width="40px">
+            <svg class="bi me-2" width="16" height="16">
+              <use xlink:href="#home"></use>
+            </svg>
+            Dashboard
+          </a>
+        </li> -->
+        <li class="nav-item" style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+          <a href="#" class="nav-link text-white">Plans</a>
+        </li>
+        <li class="nav-item" style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+          <a href="#" class="nav-link text-white">History</a>
+        </li>
+        <li class="nav-item" style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+          <a href="#" class="nav-link text-white">Settings</a>
+        </li>
+          <li class="nav-item" style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+            <div id="drop">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false" style="color: white; font-size: 20px; margin-right: 20px">
+          {{request.user}}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout_redirect' %}">Logout</a></li>
+        </ul>
+      </div>
+        </li>
+
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <span class="navbar-text">{{request.user}}</span>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div style="display: flex">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black d-none d-md-block" style="height:100vh">
+        <div class="main" style="background-color: black; margin-left: 75px;">
+          <div class="d-flex flex-column flex-shrink-0 p-3 text-white sidenav" style="width: 280px;">
+            <ul class="nav nav-pills flex-column mb-auto" style="margin-left: 30px; margin-top: 50px;">
+              <li style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+                <a href="{% url "home" %}" class="nav-link text-white">
+                  <svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#home"></use>
+                  </svg>
+                  Dashboard
+                </a>
+              </li>
+              <li style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+                <a href="{% url "plans" %}" class="nav-link text-white">
+                  <svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#table"></use>
+                  </svg>
+                  Plans
+                </a>
+              </li>
+              <li style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+                <a href="{% url "history" %}" class="nav-link text-white">
+                  <svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#speedometer2"></use>
+                  </svg>
+                  History
+                </a>
+              </li>
+           
+              <li style="margin-top: 20px; font-family: 'Lato', sans-serif; font-size:20px">
+                <a href="{% url "profile" %}" class="nav-link text-white active" style="background-image:linear-gradient( #EC1A3F,#EE376E); height:40px;width:170px" aria-current="page"
+                width="40px">
+                  <svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="#grid"></use>
+                  </svg>
+                  Settings
+                </a>
+              </li>
+            </ul>
           </div>
-          <!-- <div class="container" style="height: auto; padding:30px"> -->
-            <!-- <form action="{% url 'profile' %}" method="post" class="signup-form"> -->
-                <!-- {% csrf_token %} -->
-                <!-- <label for="openapi" class="form-label"><b>OpenAI API key</b></label> -->
-                <!-- <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box"> -->
-                <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
-                <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
-                 <!-- <button type="submit" name="set-apikey" class="signupbtn">Set</button>    -->
-                 <!-- <div> -->
-                    <!-- <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5> -->
-                    <!-- <h5 id="openApiKey" style="margin-top:10px;">********************************</h5> -->
-                    <!-- {% comment %} <h5 class="red-text" style="margin-top:10px;">ProWriting key set is:</h5> -->
-                    <!-- <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %} -->
-                <!-- </div> -->
-                <!-- <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button> -->
-                <!-- <div class="form-check" id="hideApiKeyDiv">
-                    {% if user_fields.hide_api_key %}
-                    <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
-                    {% else %}
-                    <input class="form-check-input" type="checkbox" value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
-                    {% endif %}
-                    <label class="form-check-label" for="hide_Api_keys">
-                      Hide API keys Everywhere
-                    </label>
-                  </div>
-                <div class="d-flex">
-                    {% if not user_fields.subscribed %}
-                    <a href="{{stripe_url}}" class="signupbtn" style="margin-right: 15px;">Subscribe</a>
-                    {% else %}
-                    <a href="/cancel_sub/{{user_fields.subscription_id}}/" class="signupbtn" style="margin-right: 15px;">Cancel Subscription</a>
-                    {% endif %}
-                    {% if user.is_staff %}
-                    <a href="/admin" class="signupbtn">Open admin panel</a>
-                    {% endif %}
-                </div> -->
-            <!-- </form> -->
-            <!-- <div class="essay" style="width: 95%;">
-                <div class="partition1" style="height: 100%;overflow: scroll;">
-                <h3 style="margin-left:30px; margin-top:30px">Original Essay</h3>
-                <ol>
-                {% for essay in essays %}
-                    <li><p>{{essay.original_essay}}</p></li>
-                {% endfor %}
-                </ol>
-                
-                </div>
-                <div class="partition2" style="height: 100%;overflow: scroll;">
-                <h3 style="margin-left:30px; margin-top:30px">Rephrased Essay</h3>
-                <ol>
-                {% for essay in essays %}
-                    <li><p>{{essay.rephrased_essay}}</p></li>
-                {% endfor %}
-                </ol>
-                </div>
+        </div>
+        </nav>
+        <div style="width: 100%">
+            <!-- <div class="main-head">     
+            <h1 class="head-size"><span class="red-text">Welcome</span>, {{user}}</h1>
             </div> -->
-            <!-- Settings part -->
-            
-          <!-- </div> -->
-        </div>        
-    </div>
+            <div class="box" style="flex-direction: column; gap: 5vh; padding-bottom: 10vh; margin-top: 64px;">          
+              <div class="card_shadow">
+                <form method="post" style="width: 80%;">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="settings_form">
+                    <div class="card_content">
+                        <div style="height: 10%; margin-left: 8px;">
+                            <label style="font-size: 24px; color: white"><b>Choose Approach:</b></label>
+                        </div>
+                        <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
+                            <div style="width: 30%; display: flex; flex-direction: row;">
+                                <input type="radio" id="conservative" name="approach" value="Conservative" style="margin-top: 6px;" {% if settings_form.approach.value == 'Conservative' %}checked{% endif %}/>
+                                <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Conservative</b></label>                            
+                            </div>
+                            <div style="width: 3%;"></div>
+                            <div style="width: 10%; display: flex; flex-direction: row; margin-left: 30px;">
+                                <input type="radio" id="creative" name="approach" value="Creative" style="margin-top: 6px;" onclick="toggleInputVisibility()" {% if settings_form.approach.value == 'Creative' %}checked{% endif %}/>
+                                <label style="font-size: 16px; color: white; margin-top: 2px; margin-left: 10px;"><b>Creative</b></label>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div style="height: 10%; margin-left: 8px; margin-top: 20px;">
+                            <label style="font-size: 24px; color: white"><b>Choose Model:</b></label>
+                        </div>
+                        <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
+                            <div style="width: 30%; display: flex; flex-direction: row;">
+                                <input type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;" {% if settings_form.model.value == 'GPT-3' %}checked{% endif %}/>
+                                <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>Basic</b></label>
+                            </div>
+                            <div></div>
+                            <div style="width: 20%; display: flex; flex-direction: row; margin-left: 45px;">
+                                <input type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" {% if settings_form.model.value == 'GPT-4' %}checked{% endif %}/>
+                                <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>Advanced</b></label>
+                            </div>
+                        </div>
+                        <div class="line"></div>
+                        <div style="height: 10%; margin-top: 20px;">
+                            <label style="margin: 10px; font-size: 24px; color: white;"><b>Advanced Features</b></label>
+                        </div>
+                        <div style="height: 10%; margin-top: 20px; display: flex; flex-direction: row; margin-left: 12px;">
+                            <div style="width: 25%;">
+                                <input type="checkbox" id="context" name="context" value="context" {% if settings_form.context.value == True %}checked{% endif %}>
+                                <label style="font-size: 16px; margin: 10px; color: white;">Context</label>
+                            </div>
+                            <div style="width: 30%; display: flex; flex-direction: row; margin-left: 40px;">
+                                <label style="font-size: 16px; color: white; margin-top: 0; margin-left: 30px;">Randomness</label>
+                                <input style="margin-top: -25px; width: 100px; margin-left: 10px;" type="range" min="1" max="10" {% if settings_form.randomness.value %}value="{{ settings_form.randomness.value }}"{% endif %} id="randomness" name="randomness" oninput="updateRangeValue(this.value)">
+                                <span id="rangeValue" style="margin-left: 10px; color: white;">{{settings_form.randomness.value}}</span>
+                            </div>
+                        </div>
+                        <div style="height: 40%;" id="labelInput">
+                            <div style="height: 10%; display: flex; flex-direction: row; margin-top: 20px;">
+                                <div style="width: 20%;">
+                                    <label style="font-size: 16px; margin: 10px; color: white;">Tone</label>
+                                </div>
+                                <div style="width: 5%;"></div>
+                                <div style="width: 10%;">
+                                    <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="tone" id="tone" value="{{ settings_form.tone.value|default_if_none:'' }}" type="text">
+                                </div>
+                                
+                            </div>
+                            <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
+                                <div style="width: 20%;">
+                                    <label style="font-size: 16px; margin: 10px; color: white;">Difficulty</label>
+                                </div>
+                                <div style="width: 5%;"></div>
+                                <div style="width: 10%;">
+                                    <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="difficulty" id="difficulty" value="{{ settings_form.difficulty.value|default_if_none:'easy to understand, very common' }}" type="text">
+                                </div>
+                            </div>
+                            <div style="height: 10%; display: flex; flex-direction: row; margin-top: 40px;">
+                                <div style="width: 20%;">
+                                    <label style="font-size: 16px; margin: 10px; color: white;">Adjectives</label>
+                                </div>
+                                <div style="width: 5%;"></div>
+                                <div style="width: 10%;">
+                                    <input class="input" placeholder="Enter your tone..." style="color: white; font-size: 16px; margin-left: 20px; width: 700%;" name="adj" id="adj" value="{{ settings_form.adj.value|default_if_none:'concise and precise, to the point' }}" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: -webkit-center;">
+                        <button type="submit" name="settings-form-submit" class="save-settings-btn">Save Settings</button>
+                    </div>
+                </form>
+                <form action="{% url 'profile' %}" method="post" class="signup-form">
+                    {% csrf_token %}
+                    <label for="openapi" class="form-label"><b>OpenAI API key</b></label>
+                    <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box">
+                    <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
+                    <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
+                     <button type="submit" name="set-apikey" class="signupbtn">Set</button>   
+                     <div>
+                        <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5>
+                        <h5 id="openApiKey" style="margin-top:10px;">********************************</h5>
+                        {% comment %} <h5 class="red-text" style="margin-top:10px;">ProWriting key set is:</h5>
+                        <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %}
+                    </div>
+                    <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button>
+                    <!-- <div class="form-check" id="hideApiKeyDiv">
+                        {% if user_fields.hide_api_key %}
+                        <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
+                        {% else %}
+                        <input class="form-check-input" type="checkbox" value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
+                        {% endif %}
+                        <label class="form-check-label" for="hide_Api_keys">
+                          Hide API keys Everywhere
+                        </label>
+                      </div>
+                    <div class="d-flex">
+                        {% if not user_fields.subscribed %}
+                        <a href="{{stripe_url}}" class="signupbtn" style="margin-right: 15px;">Subscribe</a>
+                        {% else %}
+                        <a href="/cancel_sub/{{user_fields.subscription_id}}/" class="signupbtn" style="margin-right: 15px;">Cancel Subscription</a>
+                        {% endif %}
+                        {% if user.is_staff %}
+                        <a href="/admin" class="signupbtn">Open admin panel</a>
+                        {% endif %}
+                    </div> -->
+                </form>               
+              </div>
+              <!-- <div class="container" style="height: auto; padding:30px"> -->
+                <!-- <form action="{% url 'profile' %}" method="post" class="signup-form"> -->
+                    <!-- {% csrf_token %} -->
+                    <!-- <label for="openapi" class="form-label"><b>OpenAI API key</b></label> -->
+                    <!-- <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box"> -->
+                    <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
+                    <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
+                     <!-- <button type="submit" name="set-apikey" class="signupbtn">Set</button>    -->
+                     <!-- <div> -->
+                        <!-- <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5> -->
+                        <!-- <h5 id="openApiKey" style="margin-top:10px;">********************************</h5> -->
+                        <!-- {% comment %} <h5 class="red-text" style="margin-top:10px;">ProWriting key set is:</h5> -->
+                        <!-- <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %} -->
+                    <!-- </div> -->
+                    <!-- <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button> -->
+                    <!-- <div class="form-check" id="hideApiKeyDiv">
+                        {% if user_fields.hide_api_key %}
+                        <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
+                        {% else %}
+                        <input class="form-check-input" type="checkbox" value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
+                        {% endif %}
+                        <label class="form-check-label" for="hide_Api_keys">
+                          Hide API keys Everywhere
+                        </label>
+                      </div>
+                    <div class="d-flex">
+                        {% if not user_fields.subscribed %}
+                        <a href="{{stripe_url}}" class="signupbtn" style="margin-right: 15px;">Subscribe</a>
+                        {% else %}
+                        <a href="/cancel_sub/{{user_fields.subscription_id}}/" class="signupbtn" style="margin-right: 15px;">Cancel Subscription</a>
+                        {% endif %}
+                        {% if user.is_staff %}
+                        <a href="/admin" class="signupbtn">Open admin panel</a>
+                        {% endif %}
+                    </div> -->
+                <!-- </form> -->
+                <!-- <div class="essay" style="width: 95%;">
+                    <div class="partition1" style="height: 100%;overflow: scroll;">
+                    <h3 style="margin-left:30px; margin-top:30px">Original Essay</h3>
+                    <ol>
+                    {% for essay in essays %}
+                        <li><p>{{essay.original_essay}}</p></li>
+                    {% endfor %}
+                    </ol>
+                    
+                    </div>
+                    <div class="partition2" style="height: 100%;overflow: scroll;">
+                    <h3 style="margin-left:30px; margin-top:30px">Rephrased Essay</h3>
+                    <ol>
+                    {% for essay in essays %}
+                        <li><p>{{essay.rephrased_essay}}</p></li>
+                    {% endfor %}
+                    </ol>
+                    </div>
+                </div> -->
+                <!-- Settings part -->
+                
+              <!-- </div> -->
+            </div>        
+        </div>
+  </div>
+    
     <script>
         const openApiKeyElement = document.getElementById('openApiKey');
         {% comment %} const proWritingApiKeyElement = document.getElementById('proWritingApiKey'); {% endcomment %}
