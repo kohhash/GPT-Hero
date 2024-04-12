@@ -271,8 +271,10 @@ import time
 
 
 def plans_page_view(request):
-    plans = Plans.objects.all()
-    return render(request, "main/plans.html" , {'plans': plans})
+    # plans = Plans.objects.all()
+    user_subscription = SubScription.objects.get(user=request.user.id)    
+    print(user_subscription.plan)    
+    return render(request, "main/plans.html" , {'current_plan': user_subscription.plan})
 
 def history_page_view(request):
     user = request.user
@@ -341,19 +343,34 @@ def payment_post(request, pk):
 
 ## use Stripe dummy card: 4242 4242 4242 4242
 @csrf_exempt
-def payment_successful(request):
+def payment_successful(request):    
+    print("payment succeeed")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
     checkout_session_id = request.GET.get('session_id', None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
     customer = stripe.Customer.retrieve(session.customer)
     print("Customer " , customer)
     print("Session" , session)
-
+    amount = session['amount_total'] / 100
     user_id = request.GET.get('user_id', None)
-    user_subscription = SubScription.objects.get(user=user_id)
-    print("User Subscription" , user_subscription)
+    current_plan = ""
+    current_plan_id = -1
+    print(user_id)
+    user_subscription, created = SubScription.objects.get_or_create(user=user_id)
+    plans = Plans.objects.all()
+    print("paied for: ", current_plan)
+    print("User Subscription:" , user_subscription)
     user_subscription.stripe_id = checkout_session_id
     user_subscription.customer_id = customer.id
+    user_subscription.is_active = True    
+    try:
+        for plan in plans:
+            if plan.price == amount:
+                current_plan = plan                       
+                user_subscription.plan = plans[plan.id - 1]
+                print("plan updated successfully")
+    except Exception as e:
+        print(e)
     user_subscription.save()
 
     return render(request, 'main/payment_successful.html', {'customer': customer})
