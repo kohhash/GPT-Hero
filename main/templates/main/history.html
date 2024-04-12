@@ -115,6 +115,18 @@
     margin-left: 70px;
     margin-right: 70px;
   }
+
+  .card-text-question {
+    background-color: #1f2937;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .card-text-answer {
+    background-color: #234567;
+    border-radius: 5px;
+    padding: 5px;
+  }
   </style>
 </head>
 <body>
@@ -258,9 +270,9 @@
        <div class="card-body bg-transparent" style=" border: 2px solid white; border-radius : 15px">
          <h5 class="card-title">{{ i.timefield }}</h5>
          <h6 class="card-subtitle mb-2 text-muted">Original Text</h6>
-         <p class="card-text">{{ i.original_essay }}</p>
+         <p class="card-text-question">{{ i.original_essay }}</p>
          <h6 class="card-subtitle mb-2 text-muted">Rephrase Text</h6>
-         <p class="card-text">{{ i.rephrased_essay }}</p>
+         <p class="card-text-answer">{{ i.rephrased_essay }}</p>
        </div>
      </div>
       {% endfor %}
