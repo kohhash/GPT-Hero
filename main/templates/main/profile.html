@@ -37,9 +37,9 @@
             background: #212121;
             box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: center;
-            align-items: start; 
+            align-items: center; 
         }
         .card_content {
             width: 100%;
@@ -149,6 +149,8 @@
         .save-settings-btn:hover {
             background-color: #45a049; /* Darker green color on hover */
         }
+
+        
     </style>
 </head>
 <body>
@@ -206,12 +208,12 @@
                     <div style="height: 10%; display: flex; flex-direction: row; margin-left: 8px; margin-top: 12px;">
                         <div style="width: 30%; display: flex; flex-direction: row;">
                             <input type="radio" id="gpt3" name="model" value="GPT-3" style="margin-top: 7px;" {% if settings_form.model.value == 'GPT-3' %}checked{% endif %}/>
-                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-3</b></label>
+                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>Basic</b></label>
                         </div>
                         <div></div>
                         <div style="width: 20%; display: flex; flex-direction: row; margin-left: 45px;">
                             <input type="radio" id="gpt4" name="model" value="GPT-4" style="margin-top: 6px;" {% if settings_form.model.value == 'GPT-4' %}checked{% endif %}/>
-                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>GPT-4</b></label>
+                            <label style="font-size: 16px; color: white; margin-top: 3px; margin-left: 10px;"><b>Advanced</b></label>
                         </div>
                     </div>
                     <div class="line"></div>
@@ -263,9 +265,7 @@
                 <div style="text-align: -webkit-center;">
                     <button type="submit" name="settings-form-submit" class="save-settings-btn">Save Settings</button>
                 </div>
-            </form>                
-          </div>
-          <div class="container" style="height: auto; padding:30px">
+            </form>
             <form action="{% url 'profile' %}" method="post" class="signup-form">
                 {% csrf_token %}
                 <label for="openapi" class="form-label"><b>OpenAI API key</b></label>
@@ -280,7 +280,7 @@
                     <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %}
                 </div>
                 <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button>
-                <div class="form-check" id="hideApiKeyDiv">
+                <!-- <div class="form-check" id="hideApiKeyDiv">
                     {% if user_fields.hide_api_key %}
                     <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
                     {% else %}
@@ -299,8 +299,45 @@
                     {% if user.is_staff %}
                     <a href="/admin" class="signupbtn">Open admin panel</a>
                     {% endif %}
-                </div>
-            </form>
+                </div> -->
+            </form>               
+          </div>
+          <!-- <div class="container" style="height: auto; padding:30px"> -->
+            <!-- <form action="{% url 'profile' %}" method="post" class="signup-form"> -->
+                <!-- {% csrf_token %} -->
+                <!-- <label for="openapi" class="form-label"><b>OpenAI API key</b></label> -->
+                <!-- <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box"> -->
+                <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
+                <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
+                 <!-- <button type="submit" name="set-apikey" class="signupbtn">Set</button>    -->
+                 <!-- <div> -->
+                    <!-- <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5> -->
+                    <!-- <h5 id="openApiKey" style="margin-top:10px;">********************************</h5> -->
+                    <!-- {% comment %} <h5 class="red-text" style="margin-top:10px;">ProWriting key set is:</h5> -->
+                    <!-- <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %} -->
+                <!-- </div> -->
+                <!-- <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button> -->
+                <!-- <div class="form-check" id="hideApiKeyDiv">
+                    {% if user_fields.hide_api_key %}
+                    <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
+                    {% else %}
+                    <input class="form-check-input" type="checkbox" value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
+                    {% endif %}
+                    <label class="form-check-label" for="hide_Api_keys">
+                      Hide API keys Everywhere
+                    </label>
+                  </div>
+                <div class="d-flex">
+                    {% if not user_fields.subscribed %}
+                    <a href="{{stripe_url}}" class="signupbtn" style="margin-right: 15px;">Subscribe</a>
+                    {% else %}
+                    <a href="/cancel_sub/{{user_fields.subscription_id}}/" class="signupbtn" style="margin-right: 15px;">Cancel Subscription</a>
+                    {% endif %}
+                    {% if user.is_staff %}
+                    <a href="/admin" class="signupbtn">Open admin panel</a>
+                    {% endif %}
+                </div> -->
+            <!-- </form> -->
             <!-- <div class="essay" style="width: 95%;">
                 <div class="partition1" style="height: 100%;overflow: scroll;">
                 <h3 style="margin-left:30px; margin-top:30px">Original Essay</h3>
@@ -322,7 +359,7 @@
             </div> -->
             <!-- Settings part -->
             
-          </div>
+          <!-- </div> -->
         </div>        
     </div>
     <script>

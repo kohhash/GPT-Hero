@@ -406,7 +406,7 @@
                         </div>
                         <div class="flex flex-row">
                             <label style="color: white; font-size: 20px; margin-top: 10px;">API Access</label>
-                        </div>
+                        </div>                        
                         <button class="buy-button" id="buy-basic" onclick="buyBasic()">Buy Now</button>
                     </div>
                 </div>
@@ -526,35 +526,85 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <script>    
+  <script>      
+    let basic_btn = document.getElementById('buy-basic');
+    let buy_style = basic_btn.style;
+    let buy_text = basic_btn.textContent;
+    function enable_disable_buy_btns(){
+      var currentPlan = "{{current_plan}}";
+      let basic_btn = document.getElementById('buy-basic');
+      let standard_btn = document.getElementById('buy-standard');
+      let pro_btn = document.getElementById('buy-pro');
+      basic_btn.style = buy_style;
+      standard_btn.style = buy_style;
+      pro_btn.style = buy_style;
+      basic_btn.textContent = buy_text;
+      standard_btn.textContent = buy_text;
+      pro_btn.textContent = buy_text;
+      // console.log(buy_style);
+      let paied_plan = null;
 
-    function updatelabel() {
-        let checkbox = document.getElementById('Checkbox');
-        let price_basic = document.getElementById('price_basic');
-        let price_standard = document.getElementById('price_standard');
-        let price_pro = document.getElementById('price_pro');
-        let sel_time1 = document.getElementById('sel_time1');
-        let sel_time2 = document.getElementById('sel_time2');
-        let sel_time3 = document.getElementById('sel_time3');
-        price_basic_num = parseInt(price_basic.textContent, 10);
-        price_standard_num = parseInt(price_standard.textContent, 10);        
-        price_pro_num = parseInt(price_pro.textContent, 10);
-        
-        if (checkbox.checked) {
-            price_basic.innerText = price_basic_num * 10;
-            price_standard.innerText = price_standard_num * 10;
-            price_pro.innerText = price_pro_num * 10;
-            sel_time1.textContent = '/Year';
-            sel_time2.textContent = '/Year';
-            sel_time3.textContent = '/Year';
-        } else {
-            price_basic.innerText = price_basic_num / 10;
-            price_standard.innerText = price_standard_num / 10;
-            price_pro.innerText = price_pro_num / 10;
-            sel_time1.textContent = '/Month';
-            sel_time2.textContent = '/Month';
-            sel_time3.textContent = '/Month';
+      console.log(currentPlan);
+      let checkbox = document.getElementById('Checkbox');
+      if(!checkbox.checked){
+        if(currentPlan.endsWith('month')){
+          if(currentPlan.startsWith("basic")){
+            paied_plan = basic_btn;
+          } else if(currentPlan.startsWith('standard')){
+            paied_plan = standard_btn;
+          } else {
+            paied_plan = pro_btn;
+          }
         }
+      } else {
+        if(currentPlan.endsWith('year')){
+          if(currentPlan.startsWith("basic")){
+            paied_plan = basic_btn;
+          } else if(currentPlan.startsWith('standard')){
+            paied_plan = standard_btn;
+          } else {
+            paied_plan = pro_btn;
+          }
+        }
+      }
+
+      paied_plan.disabled = true;
+      paied_plan.style.backgroundColor = "#222222";
+      paied_plan.style.color = "#8888ee";
+      paied_plan.style.backgroundImage = "none";
+      paied_plan.textContent = "Current Plan";
+    }
+
+    enable_disable_buy_btns();
+
+    function updatelabel() {      
+      let checkbox = document.getElementById('Checkbox');
+      let price_basic = document.getElementById('price_basic');
+      let price_standard = document.getElementById('price_standard');
+      let price_pro = document.getElementById('price_pro');
+      let sel_time1 = document.getElementById('sel_time1');
+      let sel_time2 = document.getElementById('sel_time2');
+      let sel_time3 = document.getElementById('sel_time3');
+      price_basic_num = parseInt(price_basic.textContent, 10);
+      price_standard_num = parseInt(price_standard.textContent, 10);        
+      price_pro_num = parseInt(price_pro.textContent, 10);
+      
+      if (checkbox.checked) {
+          price_basic.innerText = price_basic_num * 10;
+          price_standard.innerText = price_standard_num * 10;
+          price_pro.innerText = price_pro_num * 10;
+          sel_time1.textContent = '/Year';
+          sel_time2.textContent = '/Year';
+          sel_time3.textContent = '/Year';
+      } else {
+          price_basic.innerText = price_basic_num / 10;
+          price_standard.innerText = price_standard_num / 10;
+          price_pro.innerText = price_pro_num / 10;
+          sel_time1.textContent = '/Month';
+          sel_time2.textContent = '/Month';
+          sel_time3.textContent = '/Month';
+      }
+      enable_disable_buy_btns();
     }
 
     function getCookie(name) {
@@ -679,9 +729,9 @@
     }
 
     function confirmAndBuyPlan(planId) {
-      showCustomConfirm('Are you sure you want to buy this plan?', function() {
-        buyPlan(planId);
-      });
+      // showCustomConfirm('Are you sure you want to buy this plan?', function() {
+      buyPlan(planId);
+      // });
     }
 
     function buyBasic(){

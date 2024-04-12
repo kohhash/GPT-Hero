@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
-from app.essay_rephraser import process_essay, prompt_generator
+from app.essay_rephraser import process_essay
 from app.load_resources import ResourceValues
 from app.ai_detector import copyleaks_detector, gptzero_detector
 from accounts.models import UserExtraFields
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 
-from .models import Essays , Plans , PlansFeatures , SubScription 
+from .models import Essays , Plans , SubScription 
 from .models import SettingsModel
 from .forms import SettingsModelForm    
 from .stripe_handler import stripe_purchase_url, stripe_special_purchase_url, cancel_subscription
-from .forms import RephraseForm, SetKeyForm, SetRephraseForm
+from .forms import SetKeyForm
 from django.contrib import messages
 import stripe
 from configurations.configuration import Configuration
@@ -80,8 +80,10 @@ def profile_view(request):
     form = SetKeyForm()
     print(request.method)
     settings_form = SettingsModelForm()
+    print('tring')
     try:
         settings = SettingsModel.objects.get(user=user)
+        print(settings)
         initial_data = {
             'approach': settings.approach,
             'model': settings.model,
@@ -94,7 +96,15 @@ def profile_view(request):
         print(initial_data)
         settings_form = SettingsModelForm(instance=settings)
     except SettingsModel.DoesNotExist:
-        settings_form = SettingsModelForm()
+        settings_form = SettingsModelForm(initial={
+        "approach": "Conservative",
+        'model': "GPT-3",
+        "context": True,
+        "randomness": 7,
+        "tone": "",
+        "difficulty": "easy to understand, very common",
+        'adj': "concise and precise, to the point"
+    })
     
     if request.method == "POST":
         if 'settings-form-submit' in request.POST:            
@@ -203,13 +213,8 @@ def home_view(request):
             messages.warning(request, "Your subscription has expired or usage is exceed! Please upgrade or renew your plan or add your own api key on profile.")
             return redirect("plans")
         openai_api_key=Configuration.DefaultValues.OPEN_API_KEY
-
-    # form = RephraseForm()
-    # if request.method == "POST":
-        # form = RephraseForm(request.POST)
-        # if form.is_valid():
+    
     try:
-        # data = form.cleaned_data
         rephrase_essay = process_essay(
             essay=essay,
             approach=approach,
@@ -266,8 +271,10 @@ import time
 
 
 def plans_page_view(request):
-    plans = Plans.objects.all()
-    return render(request, "main/plans.html" , {'plans': plans})
+    # plans = Plans.objects.all()
+    user_subscription = SubScription.objects.get(user=request.user.id)    
+    print(user_subscription.plan)    
+    return render(request, "main/plans.html" , {'current_plan': user_subscription.plan})
 
 def history_page_view(request):
     user = request.user
@@ -336,31 +343,48 @@ def payment_post(request, pk):
 
 ## use Stripe dummy card: 4242 4242 4242 4242
 @csrf_exempt
-def payment_successful(request):
+def payment_successful(request):    
+    print("payment succeeed")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
     checkout_session_id = request.GET.get('session_id', None)
     session = stripe.checkout.Session.retrieve(checkout_session_id)
     customer = stripe.Customer.retrieve(session.customer)
     print("Customer " , customer)
     print("Session" , session)
-
+    amount = session['amount_total'] / 100
     user_id = request.GET.get('user_id', None)
-    user_subscription = SubScription.objects.get(user=user_id)
-    print("User Subscription" , user_subscription)
+    current_plan = ""
+    current_plan_id = -1
+    print(user_id)
+    user_subscription, created = SubScription.objects.get_or_create(user=user_id)
+    plans = Plans.objects.all()
+    print("paied for: ", current_plan)
+    print("User Subscription:" , user_subscription)
     user_subscription.stripe_id = checkout_session_id
     user_subscription.customer_id = customer.id
+    user_subscription.is_active = True    
+    try:
+        for plan in plans:
+            if plan.price == amount:
+                current_plan = plan                       
+                user_subscription.plan = plans[plan.id - 1]
+                print("plan updated successfully")
+    except Exception as e:
+        print(e)
     user_subscription.save()
 
     return render(request, 'main/payment_successful.html', {'customer': customer})
 
 @csrf_exempt
 def payment_cancelled(request):
+    print("payment-canceled")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
     return render(request, 'main/payment_cancelled.html')
 
 
 @csrf_exempt
 def stripe_webhook(request):
+    print("payment succeed")
     stripe.api_key = Configuration.STRIPE_API.PRIVATE_KEY
     payload = request.body
     time.sleep(10)
@@ -404,6 +428,7 @@ def stripe_webhook(request):
 
 ## check if user is subscribed or not and has permission to rephrase
 def check_user_subscription(user):
+    print("user subscription")
     user_subscription = SubScription.objects.get(user=user)
     user_usage = user_subscription.usage
     user_plan = user_subscription.plan.words_length
