@@ -127,6 +127,12 @@
     border-radius: 5px;
     padding: 5px;
   }
+
+  .card-body {
+    border: 2px solid #080830 !important;
+    border-radius: 15px;
+    background-color: #040415;
+  }
   </style>
 </head>
 <body>
@@ -267,7 +273,7 @@
       {% if essays != None %}
       {% for i in essays %}
       <div class="mb-4" stystyle="background-color: transparent;">
-       <div class="card-body bg-transparent" style=" border: 2px solid white; border-radius : 15px">
+       <div class="card-body" style=" border: 2px solid white; border-radius : 15px">
          <h5 class="card-title">{{ i.timefield }}</h5>
          <h6 class="card-subtitle mb-2 text-muted">Original Text</h6>
          <p class="card-text-question">{{ i.original_essay }}</p>
