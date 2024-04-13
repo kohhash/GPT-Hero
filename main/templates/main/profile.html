@@ -146,8 +146,17 @@
             transition: background-color 0.3s; /* Smooth transition for background color change */
         }
 
-        .save-settings-btn:hover {
-            background-color: #45a049; /* Darker green color on hover */
+        .key-set-btn {
+            width: 150px;
+            border-radius: 8px;
+            margin-left: 1vh;
+            border: none;
+            color: white;
+            background-color: #4CAF50;     
+        }
+
+        .save-settings-btn:hover, .key-set-btn:hover{
+            background-color: #45a029; /* Darker green color on hover */
         }
 
         .ncontainer{
@@ -186,6 +195,10 @@
         .me-2 {
             margin-right: .5rem !important;
         }
+
+        .input-box {
+            border: 2px solid white !important;
+        }        
     </style>
 </head>
 <body>
@@ -398,20 +411,24 @@
                         <button type="submit" name="settings-form-submit" class="save-settings-btn">Save Settings</button>
                     </div>
                 </form>
-                <form action="{% url 'profile' %}" method="post" class="signup-form">
+                <form action="{% url 'profile' %}" method="post" class="signup-form" style="margin-top: 2vh;">
                     {% csrf_token %}
-                    <label for="openapi" class="form-label"><b>OpenAI API key</b></label>
-                    <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box">
-                    <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
-                    <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
-                     <button type="submit" name="set-apikey" class="signupbtn">Set</button>   
-                     <div>
-                        <h5 class="red-text" style="margin-top:10px;">Open API key set is:</h5>
-                        <h5 id="openApiKey" style="margin-top:10px;">********************************</h5>
+                    <label for="openapi" style="color:white"><b>OpenAI API key</b></label>
+                    <div style="display:flex; align-items: center;">
+                        <input type="text" placeholder="Enter OpenAPI key" name="openai_api_key" class="input-box">
+                        <!-- {% comment %} <label for="prowrite" class="form-label"><b>ProWritingAid API key</b> (optional)</label>
+                            <input type="text" placeholder="Enter ProWritingAid key" name="prowritingaid_api_key" class="input-box"> {% endcomment %} -->
+                        <button type="submit" name="set-apikey" class="key-set-btn">Set</button>   
+                    </div>
+                     <div style="display: flex;
+                     align-items: flex-start;
+                     margin-top: 30px; flex-direction: column;">                        
+                        <h5 style="color: white;">Open API key set is:</h5>
+                        <h5 id="openApiKey" style="color: white; margin-top: 10px;">********************************</h5>
                         {% comment %} <h5 class="red-text" style="margin-top:10px;">ProWriting key set is:</h5>
                         <h5 id="proWritingApiKey" style="margin-top:10px;">********************************</h5> {% endcomment %}
                     </div>
-                    <button id="toggleButton" type="button" class="signupbtn">Toggle API Keys</button>
+                    <button id="toggleButton" type="button" class="key-set-btn" style="margin-top: 10px;">Toggle API Keys</button>
                     <!-- <div class="form-check" id="hideApiKeyDiv">
                         {% if user_fields.hide_api_key %}
                         <input class="form-check-input" type="checkbox" checked value="{{user_fields.hide_api_key}}" id="hide_Api_keys">
