@@ -79,8 +79,7 @@ def profile_view(request):
         essays=None
     form = SetKeyForm()
     print(request.method)
-    settings_form = SettingsModelForm()
-    print('tring')
+    settings_form = SettingsModelForm()    
     try:
         settings = SettingsModel.objects.get(user=user)
         print(settings)
@@ -175,7 +174,7 @@ def home_view(request):
     orig_essay=None
     is_user_provided_key = False
     openai_api_key = UserExtraFields.objects.get(user=request.user).openai_api_key
-
+    print("KEY: ", openai_api_key)
     prowritingaid_api_key=UserExtraFields.objects.get(user=request.user).prowritingaid_api_key
     hide_api_key = UserExtraFields.objects.get(user=request.user).hide_api_key
 
@@ -362,7 +361,7 @@ def payment_successful(request):
     print("User Subscription:" , user_subscription)
     user_subscription.stripe_id = checkout_session_id
     user_subscription.customer_id = customer.id
-    user_subscription.is_active = True    
+    user_subscription.is_active = True
     try:
         for plan in plans:
             if plan.price == amount:

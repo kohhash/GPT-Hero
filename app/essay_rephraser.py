@@ -71,18 +71,23 @@ def rephrase_text_gpt(
         model_key="gpt-3.5-turbo"
     elif model=="GPT-4":
         model_key="gpt-4"
-    result = openai.ChatCompletion.create(
-        model=model_key,
-        api_key=api_key,
-        messages=[{'role': 'user', 'content': prompt}],
-        max_tokens=4000
-        - int(
-            (len(prompt) / 4) + 5
-        ),  # Adjust max_tokens according to prompt size by subtracting 1/4th of each character in prompt along with an additional 5 for extra measures.
-        temperature=randomness,
-        presence_penalty=presence_penalty,
-    )
-    rephrased_sentence = result["choices"][0]["message"]["content"]
+    result = []
+    rephrased_sentence = ""
+    try:        
+        result = openai.ChatCompletion.create(
+            model=model_key,
+            api_key=api_key,
+            messages=[{'role': 'user', 'content': prompt}],
+            max_tokens=4000
+            - int(
+                (len(prompt) / 4) + 5
+            ),  # Adjust max_tokens according to prompt size by subtracting 1/4th of each character in prompt along with an additional 5 for extra measures.
+            temperature=randomness,
+            presence_penalty=presence_penalty,
+        )
+        rephrased_sentence = result["choices"][0]["message"]["content"]
+    except Exception as e:        
+        return "Error: \n" + e.__str__() + "\n\nPlease go to settings page to set OpenAI API Key."
     print(f"Printing from rephrase_text_gpt function - {rephrased_sentence}\n")
     if start_with:
         rephrased_sentence = rephrased_sentence.replace(start_with, "")
@@ -131,7 +136,9 @@ def rephrase_text_by_paragraph(
                 approach=approach,
                 **kwargs,
             )
-        rephrased_paragraph = rephrased_paragraph.strip()
+        if rephrased_paragraph.startswith("Error"):
+            pass
+        else: rephrased_paragraph = rephrased_paragraph.strip()
         print("\nRephrased paragraph - \n")
         print(rephrased_paragraph)
         rephrased_paragraphs.append(rephrased_paragraph)
