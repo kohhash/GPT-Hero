@@ -212,7 +212,8 @@ def home_view(request):
             messages.warning(request, "Your subscription has expired or usage is exceed! Please upgrade or renew your plan or add your own api key on profile.")
             return redirect("plans")
         openai_api_key=Configuration.DefaultValues.OPEN_API_KEY
-    
+        print(openai_api_key)
+        
     try:
         rephrase_essay = process_essay(
             essay=essay,
