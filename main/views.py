@@ -52,32 +52,41 @@ def profile_view(request):
     user=User.objects.get(username=request.user)
     user_fields=UserExtraFields.objects.get(user=request.user)
     print("User Fields" , user)
-    if request.GET.get('id'):
-        stripe_id = request.GET.get('id')
-        session = stripe.checkout.Session.retrieve(stripe_id)
-        metadata = session.get("metadata", {})
-        if metadata:
-            subscription_id=session.get('subscription')
-            setattr(user_fields, 'subscribed', True)
-            user_fields.save()
-            setattr(user_fields, 'subscription_id', subscription_id)
-            user_fields.save()
-            # Set default API keys for subscribed users
-            setattr(user_fields, 'prowritingaid_api_key', ResourceValues.openai_api_key_default_val)
-            user_fields.save()
-            setattr(user_fields, 'openai_api_key', ResourceValues.prowritingaid_api_key_default_val)
-            user_fields.save()
-        
-    if not user.is_staff:
-        stripe_url=stripe_purchase_url(user)
-    else:
-        stripe_url=stripe_special_purchase_url(user)
-
+    # try:
+    #     if request.GET.get('id'):
+    #         print("getting request id")
+    #         print(request.GET.get('id'))
+    #         stripe_id = request.GET.get('id')
+    #         print("stripe id:")
+    #         print(stripe_id)
+    #         session = stripe.checkout.Session.retrieve(stripe_id)
+    #         metadata = session.get("metadata", {})
+    #         if metadata:
+    #             subscription_id=session.get('subscription')
+    #             setattr(user_fields, 'subscribed', True)
+    #             user_fields.save()
+    #             setattr(user_fields, 'subscription_id', subscription_id)
+    #             user_fields.save()
+    #             # Set default API keys for subscribed users
+    #             setattr(user_fields, 'prowritingaid_api_key', ResourceValues.openai_api_key_default_val)
+    #             user_fields.save()
+    #             setattr(user_fields, 'openai_api_key', ResourceValues.prowritingaid_api_key_default_val)
+    #             user_fields.save()
+            
+    #     if not user.is_staff:
+    #         print("case 2")
+    #         # stripe_url=stripe_purchase_url(user)
+    #     else:
+    #         print("case 3")
+    #         stripe_url=stripe_special_purchase_url(user)
+    # except Exception as e:
+    #     print("ERROR: ", e)
     # User rephrased essay info
     essays=Essays.objects.filter(user=user)
+    print(len(essays))
     if len(essays)==0:
         essays=None
-    form = SetKeyForm()
+    # form = SetKeyForm()
     print(request.method)
     settings_form = SettingsModelForm()    
     try:
@@ -150,7 +159,7 @@ def profile_view(request):
         "settings_form": settings_form,
         "user": user,
         "user_fields": user_fields,
-        "stripe_url": stripe_url,
+        # "stripe_url": stripe_url,
         "essays": essays
     })
 
