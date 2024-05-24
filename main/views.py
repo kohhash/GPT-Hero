@@ -17,9 +17,12 @@ from configurations.configuration import Configuration
 
 # imoprt login view from django-allauth
 from allauth.account.views import LoginView, SignupView, LogoutView
-
+import tiktoken
 import os
 from dotenv import load_dotenv
+from docx import Document
+import PyPDF2
+import chardet
 
 # Load environment variables from .env
 load_dotenv()
@@ -91,6 +94,7 @@ def profile_view(request):
     settings_form = SettingsModelForm()    
     try:
         settings = SettingsModel.objects.get(user=user)
+        
         print(settings)
         initial_data = {
             'approach': settings.approach,
@@ -173,9 +177,80 @@ def landing_view(request):
         return redirect("accounts/login")
     return render(request, "main/index.html")
 
+def handle_uploaded_file(f):
+    temp_name = "temp." + str(f).split(".")[-1]
+    with open(temp_name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+    return temp_name
+
+def extract_text(file_path):
+    _, file_extension = os.path.splitext(file_path)
+
+    if file_extension.lower() == '.docx':
+        # Extract text from DOCX file
+        doc = Document(file_path)
+        full_text = []
+        for paragraph in doc.paragraphs:
+            full_text.append(paragraph.text)
+        return '\n'.join(full_text)
+
+    elif file_extension.lower() == '.pdf':
+        # Extract text from PDF file
+        with open(file_path, 'rb') as file:
+            pdf_reader = PyPDF2.PdfFileReader(file)
+            text = []
+            for page_num in range(pdf_reader.numPages):
+                page = pdf_reader.getPage(page_num)
+                text.append(page.extractText())
+            return '\n'.join(text)
+
+    elif file_extension.lower() == '.txt':
+        # Extract text from TXT file
+        with open(file_path, 'rb') as file:
+            raw_data = file.read()
+            result = chardet.detect(raw_data)
+            encoding = result['encoding']
+            return raw_data.decode(encoding)
+
+    else:
+        raise ValueError(f"Unsupported file type: {file_extension}")
+
+
 # Create your views here.
 def home_view(request):
     print("Home View" , request.user)
+    user_subscription = SubScription.objects.get(user=request.user.id)    
+    print(user_subscription.plan)    
+    
+    allowed_token_3 = 0
+    allowed_token_4 = 0
+    
+    if user_subscription.plan is "basic-month" or "basic-year":
+        allowed_token_3 = 20000
+        allowed_token_4 = 10000
+    if user_subscription.plan is "standard-month"or "standard-year":
+        allowed_token_3 = 100000
+        allowed_token_4 = 50000
+    if user_subscription.plan is "pro-month"or "pro-year":
+        allowed_token_3 = 200000
+        allowed_token_4 = 100000
+    
+    essays_list = Essays.objects.filter(user=request.user).order_by('-timefield')        
+    number_token_3 = 0
+    number_token_4 = 0
+    for essay in essays_list:
+        if essay.model == "gpt-3.5-turbo":
+            number_token_3 = number_token_3 + num_tokens_from_string(essay.original_essay)
+            number_token_3 = number_token_3 + num_tokens_from_string(essay.rephrased_essay)        
+        else:
+            number_token_4 = number_token_4 + num_tokens_from_string(essay.original_essay)
+            number_token_4 = number_token_4 + num_tokens_from_string(essay.rephrased_essay)
+                
+    print("tokens-3: ", number_token_3, "/", allowed_token_3)
+    print("tokens-4: ", number_token_4, "/", allowed_token_4)
+    
+    # messages.warning("You don't have much tokens")
     if not request.user.is_authenticated:
         return redirect("account_login")
 
@@ -197,6 +272,19 @@ def home_view(request):
     settings = SettingsModel.objects.get(user=user)
     
     essay=request.POST.get('textarea')
+    extracted_text = ""
+    try:
+        file = request.FILES.get('file')
+        print("File Accepted")
+        print(file)
+        if file:
+            # Save the file temporarily or process it directly
+            file_path = handle_uploaded_file(file)            
+            extracted_text = extract_text(file_path)
+            print("+" * 100)
+            print(extracted_text)          
+    except Exception as e:
+        print("Error: ", e)        
     approach=settings.approach
     context=settings.context
     if context==None:
@@ -208,6 +296,14 @@ def home_view(request):
     difficulty=settings.difficulty
     additional_adjectives=settings.adj
     model=settings.model
+    if allowed_token_3 > number_token_3 and allowed_token_4 < number_token_4:
+        model = "gpt-3.5-turbo"
+    elif allowed_token_3 < number_token_3 and allowed_token_4 > number_token_4:
+        model = "gpt-4o"
+    elif allowed_token_3 < number_token_3 and allowed_token_4 < number_token_4:        
+        messages.warning(request, "Please set your OpenAI API key in profile page. ")        
+        return render(request, "main/home.html")
+    
     if request.user.subscription.is_active==False:
         openai_api_key=UserExtraFields.objects.get(user=request.user).openai_api_key
         if openai_api_key == "" or openai_api_key == None or str(openai_api_key).strip() == "":
@@ -225,7 +321,7 @@ def home_view(request):
         
     try:
         rephrase_essay = process_essay(
-            essay=essay,
+            essay=essay + "\n" + extracted_text,
             approach=approach,
             context=context,
             randomness=randomness,
@@ -243,6 +339,7 @@ def home_view(request):
             original_essay=essay,
             rephrased_essay=rephrase_essay,
             user=request.user,
+            model=model
         )
         essay.save()
         reph_essay=essay.rephrased_essay
@@ -285,11 +382,33 @@ def plans_page_view(request):
     print(user_subscription.plan)    
     return render(request, "main/plans.html" , {'current_plan': user_subscription.plan})
 
+def num_tokens_from_string(text: str, encoding_name="cl100k_base") -> int:
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(text))
+    return num_tokens
+
 def history_page_view(request):
-    user = request.user
-    essays_list = Essays.objects.filter(user=user).order_by('-timefield')
-    paginator = Paginator(essays_list, 10)  
-    page = request.GET.get('page')
+    try:
+        user = request.user
+        essays_list = Essays.objects.filter(user=user).order_by('-timefield')
+        print(len(essays_list))    
+        
+        # number_token_3 = 0
+        # number_token_4 = 0
+        # for essay in essays_list:
+        #     # print(essay.model)
+        #     if essay.model == "gpt-3.5-turbo":
+        #         number_token_3 = number_token_3 + num_tokens_from_string(essay.original_essay)
+        #         number_token_3 = number_token_3 + num_tokens_from_string(essay.rephrased_essay)        
+        #     else:
+        #         number_token_4 = number_token_4 + num_tokens_from_string(essay.original_essay)
+        #         number_token_4 = number_token_4 + num_tokens_from_string(essay.rephrased_essay)        
+        # print("tokens-3: ", number_token_3)
+        # print("tokens-4: ", number_token_4)
+        paginator = Paginator(essays_list, 10)  
+        page = request.GET.get('page')
+    except Exception as e:
+        print("ERROR: ", e)
     try:
         essays = paginator.page(page)
     except PageNotAnInteger:
@@ -297,7 +416,7 @@ def history_page_view(request):
     except EmptyPage:
         essays = paginator.page(paginator.num_pages)
     if len(essays_list) == 0:
-        essays = None
+        essays = None    
 
     return render(request, "main/history.html", {'essays': essays})
 

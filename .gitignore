@@ -8,3 +8,6 @@ main/__pycache__
 db.sqlite3
 logs.txt
 .env
+temp.docx
+temp.pdf
+temp.txt

@@ -8,6 +8,7 @@ class Essays(models.Model):
     rephrased_essay=models.CharField(max_length=128000, null=True)
     timefield=models.DateTimeField(auto_now_add=True)
     user=models.ForeignKey(User, on_delete=models.CASCADE, null=True , related_name='essays')
+    model=models.CharField(max_length=128000, default="gpt-3.5-turbo")
     def __str__(self):
         return self.user.username + " " + str(self.timefield)
 
