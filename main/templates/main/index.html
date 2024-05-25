@@ -161,8 +161,18 @@
         width: 100%;
         background-color: black;
     }
+    .pricing-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        justify-content: center;
+        padding: 20px;    
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
     .card {
-        width: 21%;
+        /* width: 21%; */
         margin-left: 2%;
         margin-right: 2%;
         background-image: linear-gradient(-225deg, 
@@ -492,15 +502,15 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="pricing-card">
+            <div class="pricing-card-grid">
                 <div class="card">
                     <div class="card2">
                         <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Free Plan</label>
-                        <div class="flex flex-row text-style1" style="font-family:sans-serif;">
+                        <div class="flex flex-column text-style1" style="font-family:sans-serif;">
                             <div style="display: flex; justify-content: center;"> 
                               <p>Free</p><label></label>
                             </div>
-                            <label>&nbsp;</label>
+                            <label>Forever</label>
                           </div>
                     <div class="flex flex-row">
                         <label style="color: white; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn, Copyleaks, etc.</label>
@@ -515,7 +525,7 @@
                         <label style="color: white; font-size: 20px; margin-top: 10px;">Rephrase long texts</label>
                     </div>
                     <div class="flex flex-row">
-                        <label style="color: white; font-size: 20px; margin-top: 10px;">1,000 words with basic rephraser</label>
+                        <label style="color: white; font-size: 20px; margin-top: 10px;">1,000 words with basic </br>rephraser</label>
                     </div>
                     <div class="flex flex-row">
                       <label style="color: white; font-size: 20px; margin-top: 10px;">500 words with advanced rephraser</label>
@@ -619,10 +629,11 @@
                 <div class="card">
                     <div class="card2">
                         <label style="color: white; font-size: 24px; margin-top: 20px; font-family:sans-serif;">Enterprise</label>                        
-                        <div class="flex flex-row text-style1">
+                        <div class="flex flex-column text-style1">
                             <p>
                               <label>Contact Us</label>
                             </p>
+                            <label>&nbsp;</label>
                         </div>
                         <div class="flex flex-row">
                           <label style="color: #1a1a1a; font-size: 20px; margin-top: 50px;">Bypasses GPTZero, TurnItIn, Copyleaks, etc.</label>
