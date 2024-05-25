@@ -219,61 +219,64 @@ def extract_text(file_path):
 
 # Create your views here.
 def home_view(request):
-    print("Home View" , request.user)
-    user_subscription = SubScription.objects.get(user=request.user.id)    
-    print(user_subscription.plan)    
-    
-    allowed_token_3 = 0
-    allowed_token_4 = 0
-    
-    if user_subscription.plan is "basic-month" or "basic-year":
-        allowed_token_3 = 20000
-        allowed_token_4 = 10000
-    if user_subscription.plan is "standard-month"or "standard-year":
-        allowed_token_3 = 100000
-        allowed_token_4 = 50000
-    if user_subscription.plan is "pro-month"or "pro-year":
-        allowed_token_3 = 200000
-        allowed_token_4 = 100000
-    
-    essays_list = Essays.objects.filter(user=request.user).order_by('-timefield')        
-    number_token_3 = 0
-    number_token_4 = 0
-    for essay in essays_list:
-        if essay.model == "gpt-3.5-turbo":
-            number_token_3 = number_token_3 + num_tokens_from_string(essay.original_essay)
-            number_token_3 = number_token_3 + num_tokens_from_string(essay.rephrased_essay)        
-        else:
-            number_token_4 = number_token_4 + num_tokens_from_string(essay.original_essay)
-            number_token_4 = number_token_4 + num_tokens_from_string(essay.rephrased_essay)
-                
-    print("tokens-3: ", number_token_3, "/", allowed_token_3)
-    print("tokens-4: ", number_token_4, "/", allowed_token_4)
-    
-    # messages.warning("You don't have much tokens")
-    if not request.user.is_authenticated:
-        return redirect("account_login")
-
-    reph_essay=None
-    orig_essay=None
-    is_user_provided_key = False
-    openai_api_key = UserExtraFields.objects.get(user=request.user).openai_api_key
-    print("KEY: ", openai_api_key)
-    prowritingaid_api_key=UserExtraFields.objects.get(user=request.user).prowritingaid_api_key
-    hide_api_key = UserExtraFields.objects.get(user=request.user).hide_api_key
-
-    if prowritingaid_api_key == "" or prowritingaid_api_key == None:
-        prowritingaid_api_key = Configuration.DefaultValues.PROWRITINGAID_API_KEY
-
-    if request.method == "GET":
-        return render(request, "main/home.html", {"request":request, "result":reph_essay, "orig":orig_essay, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
-
-    user=User.objects.get(username=request.user)
-    settings = SettingsModel.objects.get(user=user)
-    
-    essay=request.POST.get('textarea')
-    extracted_text = ""
     try:
+        print("Home View" , request.user)
+        user_subscription = SubScription.objects.get(user=request.user.id)        
+        print(user_subscription.plan)    
+        
+        allowed_token_3 = 0
+        allowed_token_4 = 0
+        
+        if user_subscription.plan is "basic-month" or "basic-year":
+            allowed_token_3 = 20000
+            allowed_token_4 = 10000
+        if user_subscription.plan is "standard-month"or "standard-year":
+            allowed_token_3 = 100000
+            allowed_token_4 = 50000
+        if user_subscription.plan is "pro-month"or "pro-year":
+            allowed_token_3 = 200000
+            allowed_token_4 = 100000
+        else:
+            allowed_token_3 = 1000
+            allowed_token_4 = 500        
+        essays_list = Essays.objects.filter(user=request.user).order_by('-timefield')        
+        number_token_3 = 0
+        number_token_4 = 0
+        for essay in essays_list:
+            if essay.model == "gpt-3.5-turbo":
+                number_token_3 = number_token_3 + num_tokens_from_string(essay.original_essay)
+                number_token_3 = number_token_3 + num_tokens_from_string(essay.rephrased_essay)        
+            else:
+                number_token_4 = number_token_4 + num_tokens_from_string(essay.original_essay)
+                number_token_4 = number_token_4 + num_tokens_from_string(essay.rephrased_essay)
+                    
+        print("tokens-3: ", number_token_3, "/", allowed_token_3)
+        print("tokens-4: ", number_token_4, "/", allowed_token_4)
+        
+        # messages.warning("You don't have much tokens")
+        if not request.user.is_authenticated:
+            return redirect("account_login")
+
+        reph_essay=None
+        orig_essay=None
+        is_user_provided_key = False
+        openai_api_key = UserExtraFields.objects.get(user=request.user).openai_api_key
+        print("KEY: ", openai_api_key)
+        prowritingaid_api_key=UserExtraFields.objects.get(user=request.user).prowritingaid_api_key
+        hide_api_key = UserExtraFields.objects.get(user=request.user).hide_api_key
+
+        if prowritingaid_api_key == "" or prowritingaid_api_key == None:
+            prowritingaid_api_key = Configuration.DefaultValues.PROWRITINGAID_API_KEY
+
+        if request.method == "GET":
+            return render(request, "main/home.html", {"request":request, "result":reph_essay, "orig":orig_essay, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
+
+        
+        user=User.objects.get(username=request.user)
+        settings = SettingsModel.objects.get(user=user)
+        
+        essay=request.POST.get('textarea')
+        extracted_text = ""
         file = request.FILES.get('file')
         print("File Accepted")
         print(file)
@@ -284,41 +287,45 @@ def home_view(request):
             print("+" * 100)
             print(extracted_text)          
     except Exception as e:
-        print("Error: ", e)        
-    approach=settings.approach
-    context=settings.context
-    if context==None:
-        context=False
-    else:
-        context=True
-    randomness=settings.randomness
-    tone=settings.tone
-    difficulty=settings.difficulty
-    additional_adjectives=settings.adj
-    model=settings.model
-    if allowed_token_3 > number_token_3 and allowed_token_4 < number_token_4:
-        model = "gpt-3.5-turbo"
-    elif allowed_token_3 < number_token_3 and allowed_token_4 > number_token_4:
-        model = "gpt-4o"
-    elif allowed_token_3 < number_token_3 and allowed_token_4 < number_token_4:        
-        messages.warning(request, "Please set your OpenAI API key in profile page. ")        
-        return render(request, "main/home.html")
+        messages.error(request, e)
+        print("Error: ", e)       
     
-    if request.user.subscription.is_active==False:
-        openai_api_key=UserExtraFields.objects.get(user=request.user).openai_api_key
-        if openai_api_key == "" or openai_api_key == None or str(openai_api_key).strip() == "":
-            messages.warning(request, "Please set your OpenAI API key in profile page. ")
-            return redirect("profile")
-        is_user_provided_key = True
-    else:
-        check_sub = check_user_subscription(request.user)
-        print("check_sub" , check_sub)
-        if check_sub == False:
-            messages.warning(request, "Your subscription has expired or usage is exceed! Please upgrade or renew your plan or add your own api key on profile.")
-            return redirect("plans")
-        openai_api_key=Configuration.DefaultValues.OPEN_API_KEY
-        print(openai_api_key)
+    try: 
+        approach=settings.approach
+        context=settings.context
+        if context==None:
+            context=False
+        else:
+            context=True
+        randomness=settings.randomness
+        tone=settings.tone
+        difficulty=settings.difficulty
+        additional_adjectives=settings.adj
+        model=settings.model
+        if allowed_token_3 > number_token_3 and allowed_token_4 < number_token_4:
+            model = "gpt-3.5-turbo"
+        elif allowed_token_3 < number_token_3 and allowed_token_4 > number_token_4:
+            model = "gpt-4o"
+        elif allowed_token_3 < number_token_3 and allowed_token_4 < number_token_4:        
+            messages.warning(request, "Please set your OpenAI API key in profile page. ")        
+            return render(request, "main/home.html")
         
+        if request.user.subscription.is_active==False:
+            openai_api_key=UserExtraFields.objects.get(user=request.user).openai_api_key
+            if openai_api_key == "" or openai_api_key == None or str(openai_api_key).strip() == "":
+                messages.warning(request, "Please set your OpenAI API key in profile page. ")
+                return redirect("profile")
+            is_user_provided_key = True
+        else:
+            check_sub = check_user_subscription(request.user)
+            print("check_sub" , check_sub)
+            if check_sub == False:
+                messages.warning(request, "Your subscription has expired or usage is exceed! Please upgrade or renew your plan or add your own api key on profile.")
+                return redirect("plans")
+            openai_api_key=Configuration.DefaultValues.OPEN_API_KEY
+            print(openai_api_key)
+    except Exception as e:
+        messages.error(request, e)    
     try:
         rephrase_essay = process_essay(
             essay=essay + "\n" + extracted_text,
