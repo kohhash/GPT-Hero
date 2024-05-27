@@ -223,21 +223,20 @@ def home_view(request):
         print("Home View" , request.user)
         user_subscription = SubScription.objects.get(user=request.user.id)        
         print(user_subscription.plan)    
-        if user_subscription.plan == None:
-            user_subscription.plan = "Free"
+
         allowed_token_3 = 0
         allowed_token_4 = 0
         
         if user_subscription.plan is "basic-month" or "basic-year":
             allowed_token_3 = 20000
             allowed_token_4 = 10000
-        if user_subscription.plan is "standard-month"or "standard-year":
+        elif user_subscription.plan is "standard-month"or "standard-year":
             allowed_token_3 = 100000
             allowed_token_4 = 50000
-        if user_subscription.plan is "pro-month"or "pro-year":
+        elif user_subscription.plan is "pro-month"or "pro-year":
             allowed_token_3 = 200000
             allowed_token_4 = 100000
-        else:
+        elif user_subscription.plan == None:
             allowed_token_3 = 1000
             allowed_token_4 = 500        
         essays_list = Essays.objects.filter(user=request.user).order_by('-timefield')        
