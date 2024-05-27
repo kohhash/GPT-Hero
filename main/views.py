@@ -227,13 +227,13 @@ def home_view(request):
         allowed_token_3 = 0
         allowed_token_4 = 0
         
-        if user_subscription.plan is "basic-month" or "basic-year":
+        if user_subscription.plan == "basic-month" or "basic-year":
             allowed_token_3 = 20000
             allowed_token_4 = 10000
-        elif user_subscription.plan is "standard-month"or "standard-year":
+        elif user_subscription.plan == "standard-month"or "standard-year":
             allowed_token_3 = 100000
             allowed_token_4 = 50000
-        elif user_subscription.plan is "pro-month"or "pro-year":
+        elif user_subscription.plan == "pro-month"or "pro-year":
             allowed_token_3 = 200000
             allowed_token_4 = 100000
         elif user_subscription.plan == None:
