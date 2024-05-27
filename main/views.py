@@ -222,8 +222,8 @@ def home_view(request):
     try:
         print("Home View" , request.user)
         user_subscription = SubScription.objects.get(user=request.user.id)        
-        print(user_subscription.plan)    
-
+        print(user_subscription.plan)
+        print(type(user_subscription.plan))
         allowed_token_3 = 0
         allowed_token_4 = 0
         
