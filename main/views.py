@@ -271,12 +271,14 @@ def home_view(request):
         if request.method == "GET":
             return render(request, "main/home.html", {"request":request, "result":reph_essay, "orig":orig_essay, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
 
-        
+        print("getting user")
         user=User.objects.get(username=request.user)
+        print("get setting info")
         settings = SettingsModel.objects.get(user=user)
-        
+        print("getting essay")
         essay=request.POST.get('textarea')
         extracted_text = ""
+        print("process text")
         file = request.FILES.get('file')
         print("File Accepted")
         print(file)
