@@ -274,6 +274,8 @@ def home_view(request):
         if prowritingaid_api_key == "" or prowritingaid_api_key == None:
             prowritingaid_api_key = Configuration.DefaultValues.PROWRITINGAID_API_KEY
 
+        if request.method == "GET":
+            return render(request, "main/home.html", {"request":request, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
         user=User.objects.get(username=request.user)
         settings = SettingsModel.objects.filter(user=user).first()
         
@@ -294,8 +296,6 @@ def home_view(request):
             # Save the updated settings to the database
             settings.save()
         
-        if request.method == "GET":
-            return render(request, "main/home.html", {"request":request, "result":reph_essay, "orig":orig_essay, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
         
         # settings = SettingsModel.objects.get(user=user)
         essay=request.POST.get('textarea')

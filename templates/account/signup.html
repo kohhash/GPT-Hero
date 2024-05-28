@@ -199,8 +199,7 @@
         </div>
         <div class="box">
           <div class="container">
-            <form class="signup-form" id="signup_form" method="post" action="{% url 'account_signup' %}">
-                
+            <form class="signup-form" id="signup_form" method="post" action="{% url 'account_signup' %}">                
                 <!-- <label for="username" class="form-label"><b>Username</b></label>
                 <input type="text" placeholder="Username" name="username" class="input-box" required>
                 <label for="email" class="form-label"><b>Email</b></label>
@@ -216,7 +215,7 @@
                 <div>
                     <div>
                     {{ form.username.errors | safe }}
-                    <label for="username" class="form-label">Username</label>
+                    <label for="username" class="form-label">Username (Please do not leave any gaps.)</label>
                     {% render_field form.username placeholder="Username" name="username" type="text" autocomplete="username" required=True class="input-box" %}
                     </div>
                     <div>
