@@ -220,33 +220,39 @@ def extract_text(file_path):
 # Create your views here.
 def home_view(request):
     try:
+        current_subscription = "Free"
         print("Home View" , request.user)
         user_subscription = SubScription.objects.get(user=request.user.id)        
         print(user_subscription.plan)
         print(type(user_subscription.plan))
         allowed_token_3 = 0
         allowed_token_4 = 0
-        
-        if user_subscription.plan == "basic-month" or "basic-year":
+        print("string: ", str(user_subscription.plan))
+        print(len(str(user_subscription.plan)))
+        if str(user_subscription.plan) == "None":
+            allowed_token_3 = 1000
+            allowed_token_4 = 500
+            current_subscription = "Free"
+        elif str(user_subscription.plan) == "basic-month" or str(user_subscription.plan) == "basic-year":
             allowed_token_3 = 20000
             allowed_token_4 = 10000
-        elif user_subscription.plan == "standard-month"or "standard-year":
+            current_subscription = str(user_subscription.plan)
+        elif str(user_subscription.plan) == "standard-month"or str(user_subscription.plan) == "standard-year":
             allowed_token_3 = 100000
             allowed_token_4 = 50000
-        elif user_subscription.plan == "pro-month"or "pro-year":
+            current_subscription = str(user_subscription.plan)
+        elif str(user_subscription.plan) == "pro-month"or str(user_subscription.plan) == "pro-year":
             allowed_token_3 = 200000
             allowed_token_4 = 100000
-        elif user_subscription.plan == None:
-            allowed_token_3 = 1000
-            allowed_token_4 = 500        
+            current_subscription = str(user_subscription.plan)
         essays_list = Essays.objects.filter(user=request.user).order_by('-timefield')        
         number_token_3 = 0
         number_token_4 = 0
         for essay in essays_list:
-            if essay.model == "gpt-3.5-turbo":
+            if essay.model == "GPT-3":
                 number_token_3 = number_token_3 + num_tokens_from_string(essay.original_essay)
                 number_token_3 = number_token_3 + num_tokens_from_string(essay.rephrased_essay)        
-            else:
+            elif essay.model == "GPT-4":
                 number_token_4 = number_token_4 + num_tokens_from_string(essay.original_essay)
                 number_token_4 = number_token_4 + num_tokens_from_string(essay.rephrased_essay)
                     
@@ -268,27 +274,37 @@ def home_view(request):
         if prowritingaid_api_key == "" or prowritingaid_api_key == None:
             prowritingaid_api_key = Configuration.DefaultValues.PROWRITINGAID_API_KEY
 
+        user=User.objects.get(username=request.user)
+        settings = SettingsModel.objects.filter(user=user).first()
+        
+        if str(settings) == "None":            
+            settings, _ = SettingsModel.objects.get_or_create(user=user)
+            print("set settings attributes")
+            # Update the settings with the new form data
+            settings.approach = "Conservative"
+            settings.model = "GPT-3"
+            settings.context = "True"
+            settings.randomness = 7
+            settings.tone = "tone"
+            settings.difficulty = "easy ot understand, very common"
+            settings.adj = "concise and previse, to the point"
+
+            print(settings)
+
+            # Save the updated settings to the database
+            settings.save()
+        
         if request.method == "GET":
             return render(request, "main/home.html", {"request":request, "result":reph_essay, "orig":orig_essay, "openai_api_key":openai_api_key, "prowritingaid_api_key":prowritingaid_api_key , "hide_key":hide_api_key})
-
-        print("getting user")
-        user=User.objects.get(username=request.user)
-        print("get setting info")
+        
         # settings = SettingsModel.objects.get(user=user)
-        settings = SettingsModel.objects.filter(user=user).first()
-        print("getting essay")
         essay=request.POST.get('textarea')
         extracted_text = ""
-        print("process text")
         file = request.FILES.get('file')
-        print("File Accepted")
-        print(file)
         if file:
             # Save the file temporarily or process it directly
             file_path = handle_uploaded_file(file)            
             extracted_text = extract_text(file_path)
-            print("+" * 100)
-            print(extracted_text)          
     except Exception as e:
         messages.error(request, e)
         print("Error: ", e)       
@@ -306,18 +322,22 @@ def home_view(request):
         additional_adjectives=settings.adj
         model=settings.model
         if allowed_token_3 > number_token_3 and allowed_token_4 < number_token_4:
-            model = "gpt-3.5-turbo"
+            model = "GPT-3"
         elif allowed_token_3 < number_token_3 and allowed_token_4 > number_token_4:
             model = "gpt-4o"
         elif allowed_token_3 < number_token_3 and allowed_token_4 < number_token_4:        
-            messages.warning(request, "Please set your OpenAI API key in profile page. ")        
+            messages.warning(request, "Free tokens are exceed. Please set your OpenAI API key in profile page. ")       
             return render(request, "main/home.html")
+        print("rephrasing model:", model)
         
         if request.user.subscription.is_active==False:
             openai_api_key=UserExtraFields.objects.get(user=request.user).openai_api_key
             if openai_api_key == "" or openai_api_key == None or str(openai_api_key).strip() == "":
-                messages.warning(request, "Please set your OpenAI API key in profile page. ")
-                return redirect("profile")
+                if current_subscription == "Free":
+                    openai_api_key = OPEN_API_KEY                    
+                else:
+                    messages.warning(request, "Please set your OpenAI API key in profile page. ")
+                    return redirect("profile")
             is_user_provided_key = True
         else:
             check_sub = check_user_subscription(request.user)
@@ -492,7 +512,6 @@ def payment_successful(request):
     amount = session['amount_total'] / 100
     user_id = request.GET.get('user_id', None)
     current_plan = ""
-    current_plan_id = -1
     print(user_id)
     user_subscription, created = SubScription.objects.get_or_create(user=user_id)
     plans = Plans.objects.all()
