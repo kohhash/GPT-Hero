@@ -274,7 +274,8 @@ def home_view(request):
         print("getting user")
         user=User.objects.get(username=request.user)
         print("get setting info")
-        settings = SettingsModel.objects.get(user=user)
+        # settings = SettingsModel.objects.get(user=user)
+        SettingsModel.objects.filter(user=user).first()
         print("getting essay")
         essay=request.POST.get('textarea')
         extracted_text = ""
