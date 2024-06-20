@@ -1,28 +1,24 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim-buster
+ARG PYTHON_VERSION=3.11-slim-bullseye
 
-# set environment variables  
+FROM python:${PYTHON_VERSION}
+
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1 
+ENV PYTHONUNBUFFERED 1
 
-# Set the working directory to /app
-WORKDIR /app
+RUN mkdir -p /code
 
-# Install git and any other dependencies
-RUN apt-get update && apt-get install -y git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+WORKDIR /code
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
 
-# Install any needed packages specified in requirements.txt
-RUN pip3 install -r requirements.txt
+ENV SECRET_KEY "jVLVr7p8OMRsWnBCxk4iUYupqDrmVXLAT0Wm2CuOk6VYRgsoUY"
+RUN python manage.py collectstatic --noinput
 
-# Clone the repository
-RUN pip3 install git+https://github.com/prowriting/prowritingaid.python.git
-
-# Expose port 8000 for the Django app
 EXPOSE 8000
 
-# Run the command to start the Django app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "GPTHero.wsgi"]
